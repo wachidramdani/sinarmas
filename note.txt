@@ -1,0 +1,8 @@
+1. git init
+2. git remote add origin https://github.com/wachidramdani/master
+3. git pull / git pull orign master
+
+--update--
+1. git add *
+2. git commit -m 'pesan'
+3. git push -u origin master
