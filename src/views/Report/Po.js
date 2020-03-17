@@ -318,7 +318,7 @@ class Po extends Component {
               </div>
             </Col>
             <Col xs="12" sm="4" md="4">
-              <div className="titleAnn" style={{width: '370px'}}><i className="icon-direction"></i> Provense Suite</div>
+              <div className="titleAnn" style={{width: '370px'}}><i className="icon-direction"></i> Provense Suites</div>
               <ImageMapper src={"/assets/img/sample.jpeg"} map={MAP} width={370}
                 onClick={(area) => this.clicked(area)}
                 onMouseEnter={(area) => this.enterArea(area)}
