@@ -98,7 +98,7 @@ class Po extends Component {
         }
       ],
       customers : [
-        {id: "B15-6", name: "Bruce", photo: 'avatar2.jpg', nik: "257102029529258", phone: "0812724829420", mail: "jenni@mail.com", sales_name: "Miya", sales_photo: 'avatar5.jpg', sales_person: "Agent 32", sales_phone: "08123287429", sales_mail: "agent32@mail.com", deal_date: "14 Agustus 2019"},
+        {id: "B15-6", name: "Bruce", photo: 'avatar2.jpg', nik: "257102029529258", phone: "0812724829420", mail: "bruce@mail.com", sales_name: "Miya", sales_photo: 'avatar5.jpg', sales_person: "Agent 32", sales_phone: "08123287429", sales_mail: "agent32@mail.com", deal_date: "14 Agustus 2019"},
         {id: "B8-6", name: "John", photo: 'avatar3.jpg', nik: "357091250029520", phone: "081376588190", mail: "miya@mail.com", sales_name: "Wika", sales_photo: 'avatar6.jpg', sales_person: "Agent 15", sales_phone: "08562752920", sales_mail: "agent15@mail.com", deal_date: "29 September 2019"},
         {id: "B6-6", name: "David", photo: 'avatar1.jpg', nik: "357129992000100", phone: "085628292000", mail: "freya@mail.com", sales_name: "Joce", sales_photo: 'avatar4.jpg', sales_person: "Agent 28", sales_phone: "08580205902", sales_mail: "agent28@mail.com", deal_date: "10 September 2019"},
       ],
@@ -318,7 +318,7 @@ class Po extends Component {
               </div>
             </Col>
             <Col xs="12" sm="4" md="4">
-              <div className="titleAnn" style={{width: '370px'}}><i className="icon-direction"></i> Provense Suites</div>
+              <div className="titleAnn" style={{width: '370px'}}><i className="icon-direction"></i> Provense Suite</div>
               <ImageMapper src={"/assets/img/sample.jpeg"} map={MAP} width={370}
                 onClick={(area) => this.clicked(area)}
                 onMouseEnter={(area) => this.enterArea(area)}
