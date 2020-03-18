@@ -8,12 +8,13 @@ import { CustomTooltips } from '@coreui/coreui-plugin-chartjs-custom-tooltips';
 import BlockUi from 'react-block-ui';
 import 'react-block-ui/style.css';
 import ImageMapper from "react-image-mapper";
-import API from '../../API';
+import $ from 'jquery';
 
 class Po extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      blocking: false,
       annotations: [
         {
           geometry: {
@@ -98,9 +99,9 @@ class Po extends Component {
         }
       ],
       customers : [
-        {id: "B15-6", name: "Bruce", photo: 'avatar2.jpg', nik: "257102029529258", phone: "0812724829420", mail: "bruce@mail.com", sales_name: "Miya", sales_photo: 'avatar5.jpg', sales_person: "Agent 32", sales_phone: "08123287429", sales_mail: "agent32@mail.com", deal_date: "14 Agustus 2019"},
-        {id: "B8-6", name: "John", photo: 'avatar3.jpg', nik: "357091250029520", phone: "081376588190", mail: "miya@mail.com", sales_name: "Wika", sales_photo: 'avatar6.jpg', sales_person: "Agent 15", sales_phone: "08562752920", sales_mail: "agent15@mail.com", deal_date: "29 September 2019"},
-        {id: "B6-6", name: "David", photo: 'avatar1.jpg', nik: "357129992000100", phone: "085628292000", mail: "freya@mail.com", sales_name: "Joce", sales_photo: 'avatar4.jpg', sales_person: "Agent 28", sales_phone: "08580205902", sales_mail: "agent28@mail.com", deal_date: "10 September 2019"},
+        {id: "B15-6", name: "David", photo: 'avatar2.jpg', nik: "257102029529258", phone: "0812724829420", mail: "david@mail.com", sales_name: "Joce", sales_photo: 'avatar1.jpg', sales_person: "Agent 32", sales_phone: "08123287429", sales_mail: "agent32@mail.com", deal_date: "14 Agustus 2019"},
+        {id: "B8-6", name: "Bruce", photo: 'avatar3.jpg', nik: "357091250029520", phone: "081376588190", mail: "bruce@mail.com", sales_name: "Miya", sales_photo: 'avatar6.jpg', sales_person: "Agent 15", sales_phone: "08562752920", sales_mail: "agent15@mail.com", deal_date: "29 September 2019"},
+        {id: "B6-6", name: "John", photo: 'avatar4.jpg', nik: "357129992000100", phone: "085628292000", mail: "john@mail.com", sales_name: "Wika", sales_photo: 'avatar5.jpg', sales_person: "Agent 28", sales_phone: "08580205902", sales_mail: "agent28@mail.com", deal_date: "10 September 2019"},
       ],
       customer: {
         name: '-',
@@ -120,11 +121,20 @@ class Po extends Component {
     this.handleClick = this.handleClick.bind(this)
   }
 
+  componentDidMount() {
+    // $('.bodyAnn').click(function(e) {
+    //   var offset = $(this).offset();
+    //   alert(e.pageX - offset.left);
+    //   alert(e.pageY - offset.top);
+    // });
+  }
+
   onChange = (annotation) => {
     this.setState({ annotation })
   }
 
-  handleClick = () => {
+  handleClick = (annotation) => {
+    // console.log(annotation, 'x');
     
   }
 
@@ -148,12 +158,16 @@ class Po extends Component {
   }
 
   updateCustomer = (name, value) => {
+    let y = this.state.countUpdate + 1;
+    console.log(y, 'y');
+    this.setState({ countUpdate: y })
     this.setState( prevState => ({customer :
       {...prevState.customer, [name]: value}
-    }));
+    }) );
   }
     
 	clicked = (area) => {
+    // this.setState({blocking: true});
     // alert('You clicked ' + area.desc);
     this.state.customers.map((column, index) => {
       if(column.id === area.desc){
@@ -174,7 +188,18 @@ class Po extends Component {
   }
   
 	clickedOutside = (evt) => {
-		// console.log(evt);
+		this.updateCustomer('name', '-');
+    this.updateCustomer('photo', 'avatar.png');
+    this.updateCustomer('phone', '-');
+    this.updateCustomer('nik', '-');
+    this.updateCustomer('mail', '-');
+    this.updateCustomer('address', '-');
+    this.updateCustomer('sales_name', '-');
+    this.updateCustomer('sales_photo', 'avatar.png');
+    this.updateCustomer('sales_person', '-');
+    this.updateCustomer('sales_mail', '-');
+    this.updateCustomer('sales_phone', '-');
+    this.updateCustomer('deal_date', '-');
   }
   
 	moveOnImage = (evt) => {
@@ -290,9 +315,9 @@ class Po extends Component {
     const MAP = {
       name: "my-map",
       areas: [
-        { name: "1", desc: "B15-6", shape: "rect", coords: [255,138,245,123], preFillColor: "rgba(249,194,226, 0.9)"  },
-        { name: "2", desc: "B8-6", shape: "rect", coords: [257,202,247,187], preFillColor: "rgba(171,221,225, 0.9)"  },
-        { name: "3", desc: "B6-6", shape: "rect", coords: [259,235,248,218], preFillColor: "rgba(171,221,225, 0.9)"  }
+        { name: "1", desc: "B15-6", shape: "rect", coords: [255,138,245,123], preFillColor: "rgba(249,194,226, 0.9)", fillColor: "red"  },
+        { name: "2", desc: "B8-6", shape: "rect", coords: [257,202,247,187], preFillColor: "rgba(171,221,225, 0.9)", fillColor: "red"  },
+        { name: "3", desc: "B6-6", shape: "rect", coords: [259,235,248,218], preFillColor: "rgba(171,221,225, 0.9)", fillColor: "red"  }
       ]
     }
 
@@ -300,7 +325,7 @@ class Po extends Component {
       <div className="animated fadeIn">
         <BlockUi tag="div" blocking={this.state.blocking}>
           <Row>
-            <Col xs="12" sm="12" md="12" style={{marginBottom: '20px', marginTop: '-15px', marginLeft: '-15px'}}>
+            <Col xs="12" sm="12" md="12" style={{marginBottom: '20px', marginTop: '-15px', marginLeft: '-15px', textAlign: 'center'}}>
               <div style={{backgroundColor: '#fcfcfc', float: 'left', border: '1px solid #C8CED3', width:'50px', height: '40px', textAlign:'center'}}>
                 <i className="icon-graph" style={{color: '#333', fontSize: '22px', lineHeight: '45px'}}></i>
               </div>
@@ -317,91 +342,107 @@ class Po extends Component {
                 <i className="icon-info22" style={{color: '#333', fontSize: '22px', lineHeight: '45px'}}></i>
               </div>
             </Col>
-            <Col xs="12" sm="4" md="4">
-              <div className="titleAnn" style={{width: '370px'}}><i className="icon-direction"></i> Provense Suite</div>
-              <ImageMapper src={"/assets/img/sample.jpeg"} map={MAP} width={370}
-                onClick={(area) => this.clicked(area)}
-                onMouseEnter={(area) => this.enterArea(area)}
-                onMouseLeave={(area) => this.leaveArea(area)}
-                onMouseMove={(area, _, evt) => this.moveOnArea(area, evt)}
-                onImageClick={(evt) => this.clickedOutside(evt)}
-                onImageMouseMove={(evt) => this.moveOnImage(evt)}
-              />
-              {
-                this.state.hoveredArea &&
-                <span className="tooltip"
-                    style={{ ...this.getTipPosition(this.state.hoveredArea)}}>
-                  { this.state.hoveredArea && this.state.hoveredArea.name}
-                </span>
-              }
-              {/* <Annotation
-                src={"/assets/img/sample.jpeg"}
-                alt='Site Plan'
-                annotations={this.state.annotations}
-                activeAnnotations={this.state.activeAnnotation}
-                type={RectangleSelector.TYPE}
-                value={this.state.annotation}
-                onChange={this.onChange}
-                onSubmit={this.onSubmit}
-                onClick={this.handleClick}
-                disableAnnotation={true}
-                disableOverlay={true}
-              /> */}
-            </Col>
-            <Col xs="12" sm="8" md="8">
+            <Col xs="12" sm="12" md="12" style={{marginBottom: '20px', minWidth: '370px'}}>
+              {/* <div className="titleAnn"><i className="icon-direction"></i> Provense Suite</div> */}
               <Row>
-                <Col xs="12" sm="6" md="6">
-                  <Card className="card-accent-primary">
-                    <CardHeader>
-                      <i className="icon-user"></i>Customer
-                    </CardHeader>
-                      <CardBody>
-                        <img src={ '../../assets/img/avatars/' + this.state.customer.photo} className="img-card" alt="avatar" />
-                        <div className="separator-card">
-                          <div className="leftText">Name</div>
-                          <div className="rightText">: {this.state.customer.name} </div>
-                          <br/>
-                          <div className="leftText">NIK</div>
-                          <div className="rightText">: {this.state.customer.nik} </div>
-                          <br/>
-                          <div className="leftText">Phone</div>
-                          <div className="rightText">: {this.state.customer.phone} </div>
-                          <br/>
-                          <div className="leftText">Email</div>
-                          <div className="rightText">: {this.state.customer.mail} </div>
-                          <br/>
-                          <div className="leftText">Address</div>
-                          <div className="rightText">: {this.state.customer.address} </div>
-                        </div>
-                      </CardBody>
-                  </Card>
+                <Col xs="12" sm="12" md="12" lg="6" style={{marginBottom: '20px'}}>
+                  <div className="center-block" >
+                    <div className="titleAnn" style={{width: '376px'}}><i className="icon-direction"></i> Provense Suite</div>
+                    <div className="img-plan">
+                      <ImageMapper src={"/assets/img/sample.jpeg"} map={MAP} width={370}
+                        onClick={(area) => this.clicked(area)}
+                        onMouseEnter={(area) => this.enterArea(area)}
+                        onMouseLeave={(area) => this.leaveArea(area)}
+                        onMouseMove={(area, _, evt) => this.moveOnArea(area, evt)}
+                        onImageClick={(evt) => this.clickedOutside(evt)}
+                        onImageMouseMove={(evt) => this.moveOnImage(evt)}
+                      />
+                      {
+                        this.state.hoveredArea &&
+                        <span className="tooltip"
+                            style={{ ...this.getTipPosition(this.state.hoveredArea)}}>
+                          { this.state.hoveredArea && this.state.hoveredArea.name}
+                        </span>
+                      }
+                    </div>
+                  </div>
                 </Col>
-                <Col xs="12" sm="6" md="6">
-                  <Card className="card-accent-primary">
-                    <CardHeader>
-                      <i className="icon-user"></i>Sales Person
-                    </CardHeader>
-                      <CardBody>
-                        <img src={ '../../assets/img/avatars/' + this.state.customer.sales_photo } className="img-card" alt="avatar" />
-                        <div className="separator-card">
-                          <div className="leftText">Name</div>
-                          <div className="rightText">: {this.state.customer.sales_name} </div>
-                          <br/>
-                          <div className="leftText">Sales Person</div>
-                          <div className="rightText">: {this.state.customer.sales_person} </div>
-                          <br/>
-                          <div className="leftText">Phone</div>
-                          <div className="rightText">: {this.state.customer.sales_phone} </div>
-                          <br/>
-                          <div className="leftText">Email</div>
-                          <div className="rightText">: {this.state.customer.sales_mail} </div>
-                          <br/>
-                          <div className="leftText">Deal Date</div>
-                          <div className="rightText">: {this.state.customer.deal_date} </div>
-                        </div>
-                      </CardBody>
-                  </Card>
+                <Col xs="12" sm="12" md="12" lg="6">
+                  <Row>
+                    <Col xs="12" sm="12" md="12">
+                      <Card className="card-accent-primary">
+                        <CardHeader>
+                          <i className="icon-user"></i>Customer
+                        </CardHeader>
+                          <CardBody>
+                            <img src={ '../../assets/img/avatars/' + this.state.customer.photo} className="img-card" alt="avatar" />
+                            <div className="separator-card">
+                              <div className="leftText">Name</div>
+                              <div className="rightText">: {this.state.customer.name} </div>
+                              <br/>
+                              <div className="leftText">NIK</div>
+                              <div className="rightText">: {this.state.customer.nik} </div>
+                              <br/>
+                              <div className="leftText">Phone</div>
+                              <div className="rightText">: {this.state.customer.phone} </div>
+                              <br/>
+                              <div className="leftText">Email</div>
+                              <div className="rightText">: {this.state.customer.mail} </div>
+                              <br/>
+                              <div className="leftText">Address</div>
+                              <div className="rightText">: <b>{this.state.customer.address}</b> </div>
+                            </div>
+                          </CardBody>
+                      </Card>
+                    </Col>
+                    <Col xs="12" sm="12" md="12">
+                      <Card className="card-accent-primary">
+                        <CardHeader>
+                          <i className="icon-user"></i>Sales Person
+                        </CardHeader>
+                          <CardBody>
+                            <img src={ '../../assets/img/avatars/' + this.state.customer.sales_photo } className="img-card" alt="avatar" />
+                            <div className="separator-card">
+                              <div className="leftText">Name</div>
+                              <div className="rightText">: {this.state.customer.sales_name} </div>
+                              <br/>
+                              <div className="leftText">Sales Person</div>
+                              <div className="rightText">: {this.state.customer.sales_person} </div>
+                              <br/>
+                              <div className="leftText">Phone</div>
+                              <div className="rightText">: {this.state.customer.sales_phone} </div>
+                              <br/>
+                              <div className="leftText">Email</div>
+                              <div className="rightText">: {this.state.customer.sales_mail} </div>
+                              <br/>
+                              <div className="leftText">Deal Date</div>
+                              <div className="rightText">: {this.state.customer.deal_date} </div>
+                            </div>
+                          </CardBody>
+                      </Card>
+                    </Col>
+                  </Row>
                 </Col>
+              </Row>
+              
+              {/* <div className="bodyAnn">
+                <Annotation
+                  src={"/assets/img/sample.jpeg"}
+                  alt='Site Plan'
+                  annotations={this.state.annotations}
+                  activeAnnotations={this.state.activeAnnotation}
+                  type={RectangleSelector.TYPE}
+                  value={this.state.annotation}
+                  onChange={this.onChange}
+                  onSubmit={this.onSubmit}
+                  onClick={this.handleClick}
+                  disableAnnotation={false}
+                  disableOverlay={true}
+                />
+              </div> */}
+            </Col>
+            <Col xs="12" sm="12" md="12">
+              <Row>
                 <Col xs="12" sm="6" md="6">
                   <Card className="card-accent-primary">
                       <CardBody>

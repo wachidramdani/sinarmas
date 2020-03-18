@@ -1,7 +1,7 @@
 import React, { Component, Suspense } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import * as router from 'react-router-dom';
-import { Container } from 'reactstrap';
+import { Container, Col, Row, } from 'reactstrap';
 import Swal from 'sweetalert2';
 
 import API from '../../API';
@@ -102,17 +102,21 @@ class DefaultLayout extends Component {
           </AppSidebar>
           <main className="main">
             <AppBreadcrumb appRoutes={routes} router={router}/>
-            <div className="button-breadcrumb">
-              <i className="icon-pushpin" style={{fontSize: '15px'}}></i>
-              <i className="icon-reset" style={{fontSize: '15px', backgroundColor: 'yellow', borderRadius: '10px', padding: '1px 2px 3px 2px ', color: '#333'}}></i>
-              <i className="icon-comments"></i>
-              <i className="icon-bookmark3" style={{fontWeight: 'bold'}}></i>
-              <i className="icon-share3" style={{fontSize: '15px'}}></i>
-              <i className="icon-star-empty3" style={{fontWeight: 'bold'}}></i>
-              <i className="icon-envelope" style={{fontSize: '18px'}}></i>
-              <i className="icon-upload7" style={{fontSize: '18px'}}></i>
-              <i className="icon-menu" style={{marginLeft: '10px'}}></i>
-            </div>
+            <Row>
+              <Col className="d-none d-lg-block">
+                <div className="button-breadcrumb d-block d-lg-block">
+                  <i className="icon-pushpin" style={{fontSize: '15px'}}></i>
+                  <i className="icon-reset" style={{fontSize: '15px', backgroundColor: 'yellow', borderRadius: '10px', padding: '1px 2px 3px 2px ', color: '#333'}}></i>
+                  <i className="icon-comments"></i>
+                  <i className="icon-bookmark3" style={{fontWeight: 'bold'}}></i>
+                  <i className="icon-share3" style={{fontSize: '15px'}}></i>
+                  <i className="icon-star-empty3" style={{fontWeight: 'bold'}}></i>
+                  <i className="icon-envelope" style={{fontSize: '18px'}}></i>
+                  <i className="icon-upload7" style={{fontSize: '18px'}}></i>
+                  <i className="icon-menu" style={{marginLeft: '10px'}}></i>
+                </div>
+              </Col>
+            </Row>
             <Container fluid>
               <Suspense fallback={this.loading()}>
                 <Switch>
