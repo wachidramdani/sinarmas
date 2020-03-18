@@ -98,9 +98,24 @@ class Po extends Component {
         }
       ],
       customers : [
-        {id: "B15-6", name: "David", photo: 'avatar2.jpg', nik: "257102029529258", phone: "0812724829420", mail: "david@mail.com", sales_name: "Joce", sales_photo: 'avatar1.jpg', sales_person: "Agent 32", sales_phone: "08123287429", sales_mail: "agent32@mail.com", deal_date: "14 Agustus 2019"},
-        {id: "B8-6", name: "Bruce", photo: 'avatar3.jpg', nik: "357091250029520", phone: "081376588190", mail: "bruce@mail.com", sales_name: "Miya", sales_photo: 'avatar6.jpg', sales_person: "Agent 15", sales_phone: "08562752920", sales_mail: "agent15@mail.com", deal_date: "29 September 2019"},
-        {id: "B6-6", name: "John", photo: 'avatar4.jpg', nik: "357129992000100", phone: "085628292000", mail: "john@mail.com", sales_name: "Wika", sales_photo: 'avatar5.jpg', sales_person: "Agent 28", sales_phone: "08580205902", sales_mail: "agent28@mail.com", deal_date: "10 September 2019"},
+        { 
+          id: "B15-6", name: "David", photo: '2.jpg', nik: "257102029529258", phone: "0812724829420", mail: "david@mail.com", 
+          sales_name: "Joce", sales_photo: '5.jpg', sales_person: "Agent 32", sales_phone: "08123287429", sales_mail: "agent32@mail.com", deal_date: "14 Agustus 2019",
+          status_unit: "Sold", phone_number: "021-777-666", hard_over_date: "-", id_billing: "001-980-XXX", nopel_ipl: "001-204-XXX", tarif_ipl: "662.500", nilai_ipl: "2.695",
+          top: 'Cash', tod: 'Home Mortgage Express', sales_price: 'Rp. 1.404.750.999'
+        },
+        {
+          id: "B8-6", name: "Bruce", photo: '3.jpg', nik: "357091250029520", phone: "081376588190", mail: "bruce@mail.com", 
+          sales_name: "Miya", sales_photo: '6.jpg', sales_person: "Agent 15", sales_phone: "08562752920", sales_mail: "agent15@mail.com", deal_date: "29 September 2019",
+          status_unit: "Payment Process", phone_number: "021-888-123", hard_over_date: "-", id_billing: "001-760-XXX", nopel_ipl: "001-884-XXX", tarif_ipl: "699.000", nilai_ipl: "3.105",
+          top: 'KPR/T 6BLN CCL 18', tod: 'Home Mortgage Express', sales_price: 'Rp. 1.521.220.000'
+        },
+        {
+          id: "B6-6", name: "John", photo: '1.jpg', nik: "357129992000100", phone: "085628292000", mail: "john@mail.com", 
+          sales_name: "Wika", sales_photo: '8.jpg', sales_person: "Agent 28", sales_phone: "08580205902", sales_mail: "agent28@mail.com", deal_date: "10 September 2019",
+          status_unit: "Booked", phone_number: "021-777-389", hard_over_date: "-", id_billing: "001-290-XXX", nopel_ipl: "001-999-XXX", tarif_ipl: "620.000", nilai_ipl: "2.250",
+          top: '-', tod: 'Home Mortgage Express', sales_price: 'Rp. 1.376.427.999'
+        },
       ],
       customer: {
         name: '-',
@@ -114,7 +129,17 @@ class Po extends Component {
         sales_person: '-',
         sales_phone: '-',
         sales_mail: '-',
-        deal_date: '-'
+        deal_date: '-',
+        status_unit: "-", 
+        phone_number: "-", 
+        hard_over_date: "-", 
+        id_billing: "-", 
+        nopel_ipl: "-", 
+        tarif_ipl: "-", 
+        nilai_ipl: "-",
+        top: "-",
+        tod: "-",
+        sales_price: "-"
       }
     }
     this.handleClick = this.handleClick.bind(this)
@@ -157,9 +182,6 @@ class Po extends Component {
   }
 
   updateCustomer = (name, value) => {
-    let y = this.state.countUpdate + 1;
-    console.log(y, 'y');
-    this.setState({ countUpdate: y })
     this.setState( prevState => ({customer :
       {...prevState.customer, [name]: value}
     }) );
@@ -182,6 +204,16 @@ class Po extends Component {
         this.updateCustomer('sales_mail', column.sales_mail);
         this.updateCustomer('sales_phone', column.sales_phone);
         this.updateCustomer('deal_date', column.deal_date);
+        this.updateCustomer('status_unit', column.status_unit);
+        this.updateCustomer('phone_number', column.phone_number);
+        this.updateCustomer('hard_over_date', column.hard_over_date);
+        this.updateCustomer('id_billing', column.id_billing);
+        this.updateCustomer('nopel_ipl', column.nopel_ipl);
+        this.updateCustomer('tarif_ipl', column.tarif_ipl);
+        this.updateCustomer('nilai_ipl', column.nilai_ipl);
+        this.updateCustomer('top', column.top);
+        this.updateCustomer('tod', column.tod);
+        this.updateCustomer('sales_price', column.sales_price);
       }
     });
   }
@@ -199,6 +231,16 @@ class Po extends Component {
     this.updateCustomer('sales_mail', '-');
     this.updateCustomer('sales_phone', '-');
     this.updateCustomer('deal_date', '-');
+    this.updateCustomer('status_unit', '-');
+    this.updateCustomer('phone_number', '-');
+    this.updateCustomer('hard_over_date', '-');
+    this.updateCustomer('id_billing', '-');
+    this.updateCustomer('nopel_ipl', '-');
+    this.updateCustomer('tarif_ipl', '-');
+    this.updateCustomer('nilai_ipl', '-');
+    this.updateCustomer('top', '-');
+    this.updateCustomer('tod', '-');
+    this.updateCustomer('sales_price', '-');
   }
   
 	moveOnImage = (evt) => {
@@ -319,26 +361,26 @@ class Po extends Component {
         { name: "3", desc: "B6-6", shape: "rect", coords: [259,235,248,218], preFillColor: "rgba(171,221,225, 0.9)", fillColor: "red"  }
       ]
     }
-
+    
     return (
       <div className="animated fadeIn">
         <BlockUi tag="div" blocking={this.state.blocking}>
           <Row>
             <Col xs="12" sm="12" md="12" style={{marginBottom: '20px', marginTop: '-15px', marginLeft: '-15px', textAlign: 'center'}}>
               <div style={{backgroundColor: '#fcfcfc', float: 'left', border: '1px solid #C8CED3', width:'50px', height: '40px', textAlign:'center'}}>
-                <i className="icon-graph" style={{color: '#333', fontSize: '22px', lineHeight: '45px'}}></i>
+                <i className="icon-graph" style={{color: '#333', fontSize: '22px', lineHeight: '45px', cursor: 'pointer'}}></i>
               </div>
               <div style={{backgroundColor: '#fcfcfc', float: 'left', border: '1px solid #C8CED3', width:'50px', height: '40px', textAlign:'center'}}>
-                <i className="icon-hammer-wrench" style={{color: '#333', fontSize: '22px', lineHeight: '45px'}}></i>
+                <i className="icon-hammer-wrench" style={{color: '#333', fontSize: '22px', lineHeight: '45px', cursor: 'pointer'}}></i>
               </div>
               <div style={{backgroundColor: '#fcfcfc', float: 'left', border: '1px solid #C8CED3', width:'50px', height: '40px', textAlign:'center'}}>
-                <i className="icon-home7" style={{color: '#333', fontSize: '22px', lineHeight: '45px'}}></i>
+                <i className="icon-home7" style={{color: '#333', fontSize: '22px', lineHeight: '45px', cursor: 'pointer'}}></i>
               </div>
               <div style={{backgroundColor: '#fcfcfc', float: 'left', border: '1px solid #C8CED3', width:'50px', height: '40px', textAlign:'center'}}>
-                <i className="icon-cogs" style={{color: '#333', fontSize: '22px', lineHeight: '45px'}}></i>
+                <i className="icon-cogs" style={{color: '#333', fontSize: '22px', lineHeight: '45px', cursor: 'pointer'}}></i>
               </div>
               <div style={{backgroundColor: '#fcfcfc', float: 'left', border: '1px solid #C8CED3', width:'50px', height: '40px', textAlign:'center'}}>
-                <i className="icon-info22" style={{color: '#333', fontSize: '22px', lineHeight: '45px'}}></i>
+                <i className="icon-info22" style={{color: '#333', fontSize: '22px', lineHeight: '45px', cursor: 'pointer'}}></i>
               </div>
             </Col>
             <Col xs="12" sm="12" md="12" style={{marginBottom: '20px', minWidth: '370px'}}>
@@ -449,25 +491,45 @@ class Po extends Component {
                           <div className="titleText"><b>Operational</b></div>
                           <br/>
                           <div className="leftTextBig">Status Unit</div>
-                          <div className="rightText">: Sold </div>
+                          <div className="rightText">: <b>
+                            {(() => {
+                              if (this.state.customer.status_unit === 'Sold') {
+                                return (
+                                  <label style={{backgroundColor: 'green', padding: '0px 6px', marginBottom: '0', color: 'white'}}>{this.state.customer.status_unit}</label>
+                                )
+                              } else if (this.state.customer.status_unit === 'Booked') {
+                                return (
+                                  <label style={{backgroundColor: 'orange', padding: '0px 6px', marginBottom: '0'}}>{this.state.customer.status_unit}</label>
+                                )
+                              } else if (this.state.customer.status_unit === 'Payment Process') {
+                                return (
+                                  <label style={{backgroundColor: 'blue', padding: '0px 6px', marginBottom: '0', color: 'white'}}>{this.state.customer.status_unit}</label>
+                                )
+                              } else {
+                                return (
+                                  <label style={{backgroundColor: 'white', marginBottom: '0'}}>{this.state.customer.status_unit}</label>
+                                )
+                              }
+                            })()}
+                          </b> </div>
                           <br/>
                           <div className="leftTextBig">Phone Number</div>
-                          <div className="rightText">: 021-777-666 </div>
+                          <div className="rightText">: {this.state.customer.phone_number} </div>
                           <br/>
                           <div className="leftTextBig">Hard Over Date</div>
-                          <div className="rightText">: - </div>
+                          <div className="rightText">: {this.state.customer.hard_over_date} </div>
                           <br/>
                           <div className="leftTextBig">ID Billing</div>
-                          <div className="rightText">: xxx-xxx-xxx </div>
+                          <div className="rightText">: {this.state.customer.id_billing} </div>
                           <br/>
                           <div className="leftTextBig">NOPEL IPL</div>
-                          <div className="rightText">: xxx-xxx-xxx </div>
+                          <div className="rightText">: {this.state.customer.nopel_ipl} </div>
                           <br/>
                           <div className="leftTextBig">Tarif IPL per m2</div>
-                          <div className="rightText">: 662.500 </div>
+                          <div className="rightText">: {this.state.customer.tarif_ipl} </div>
                           <br/>
                           <div className="leftTextBig">Nilai IPL per bulan</div>
-                          <div className="rightText">: 2.695 </div>
+                          <div className="rightText">: {this.state.customer.nilai_ipl} </div>
                           <br/>
                         </div>
                         <Button className="btn-github btn-sm button-card">
@@ -483,11 +545,11 @@ class Po extends Component {
                           <div className="titleText"><b>Term of Payment</b></div>
                           <br/>
                           <div className="leftText2"><b>Term of Payment :</b></div>
-                          <div className="leftText2">KPR/T 6BLN CCL 18X</div>
+                          <div className="leftText2">{this.state.customer.top}</div>
                           <div className="leftText2"><b>Top Description :</b></div>
-                          <div className="leftText2">Home Mortgage Express</div>
+                          <div className="leftText2">{this.state.customer.tod}</div>
                           <div className="leftText2"><b>Sales Prices :</b></div>
-                          <div className="leftText2">Rp. 1.376.427.999</div>
+                          <div className="leftText2">{this.state.customer.sales_price}</div>
                         </div>
                         <div style={{width: '50%', float: 'right'}}>
                           <div style={{width: '100%', height: '180px'}}>
