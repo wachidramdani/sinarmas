@@ -8,7 +8,6 @@ import { CustomTooltips } from '@coreui/coreui-plugin-chartjs-custom-tooltips';
 import BlockUi from 'react-block-ui';
 import 'react-block-ui/style.css';
 import ImageMapper from "react-image-mapper";
-import $ from 'jquery';
 
 class Po extends Component {
   constructor(props) {
