@@ -1,0 +1,4 @@
+- npm install -S jquery
+- npm i react-svg
+- npm i react-svg-pan-zoom
+- npm i react-svg-pan-zoom-loader

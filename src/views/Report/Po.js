@@ -1,17 +1,12 @@
 import React, { Component } from 'react';
 import { Table, Card, Form, FormGroup, Label, Input, Button, CardBody, CardHeader, Col, Row, Modal, ModalHeader, ModalBody, Collapse } from 'reactstrap';
-import Annotation from 'react-image-annotation';
-import {PointSelector, RectangleSelector} from 'react-image-annotation/lib/selectors';
-import { ReactSVG } from 'react-svg'
 import {INITIAL_VALUE, ReactSVGPanZoom, TOOL_NONE} from 'react-svg-pan-zoom';
-import { ReactComponent as YSvg } from '../../assets/img/sample.svg';
 import {ReactSvgPanZoomLoader, SvgLoaderSelectElement} from 'react-svg-pan-zoom-loader'
 import 'react-dropdown/style.css'
 import { Bar, Line } from 'react-chartjs-2';
 import { CustomTooltips } from '@coreui/coreui-plugin-chartjs-custom-tooltips';
 import BlockUi from 'react-block-ui';
 import 'react-block-ui/style.css';
-import ImageMapper from "react-image-mapper";
 import $ from 'jquery';
 
 class Po extends Component {
