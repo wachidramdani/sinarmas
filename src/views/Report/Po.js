@@ -8,186 +8,27 @@ import { CustomTooltips } from '@coreui/coreui-plugin-chartjs-custom-tooltips';
 import BlockUi from 'react-block-ui';
 import 'react-block-ui/style.css';
 import $ from 'jquery';
+import Customer from './Customer';
+import CustomerDb from './CustomerDb';
+import CommonTable from '../Commons/Table/CommonTable';
+import Dropdown from 'react-dropdown'
 
 class Po extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      oldAreaID: '',
-      oldAreaColor: '',
+      cluster: 'Tabebuya, BSD City',
+      selected: { value: 'S1', label: 'Tabebuya, BSD City' },
       blocking: false,
       tool: TOOL_NONE,
       value: INITIAL_VALUE,
-      annotations: [
-        {
-          geometry: {
-            type: 'RECTANGLE',
-            x: 66.56,
-            y: 46.89,
-            width: 3.18,
-            height: 4.76
-          },
-          data: {
-            text: 'B10-6',
-            id: 1
-          }
-        },
-        {
-          geometry: {
-            type: 'RECTANGLE',
-            x: 66.07,
-            y: 33.85,
-            width: 2.93,
-            height: 4.51
-          },
-          data: {
-            text: 'B15-6',
-            id: 2
-          }
-        },
-        {
-          geometry: {
-            type: 'RECTANGLE',
-            x: 77.57,
-            y: 65.45,
-            width: 2.94,
-            height: 5.015
-          },
-          data: {
-            text: 'B3-3',
-            id: 3
-          }
-        },
-        {
-          geometry: {
-            type: 'RECTANGLE',
-            x: 80.26,
-            y: 65.45,
-            width: 2.94,
-            height: 5.015
-          },
-          data: {
-            text: 'B3-4',
-            id: 4
-          }
-        },
-        {
-          geometry: {
-            type: 'RECTANGLE',
-            x: 82.96,
-            y: 65.45,
-            width: 2.94,
-            height: 5.015
-          },
-          data: {
-            text: 'B3-5',
-            id: 5
-          }
-        }
+      customers : Customer,
+      tableHead: [
+        { width: "", title: "Address", dataField: "address", headerAlign: 'center', dataAlign: 'center', dataFormat: this.icon.bind(this) },
+        { width: "80", title: "Status", dataField: "status_unit", headerAlign: 'center', dataAlign: 'center', dataFormat: this.status.bind(this) },
+        { width: "60", title: "Action", dataField: "action", headerAlign: 'center', dataAlign: 'center', dataFormat: this.actionTable.bind(this) }
       ],
-      annotation: {},
-      activeAnnotation: [
-        {
-          geometry: {
-            type: 'RECTANGLE',
-            x: 82.96,
-            y: 65.45,
-            width: 2.94,
-            height: 5.015
-          },
-          data: {
-            text: 'B3-5',
-            id: 5
-          }
-        }
-      ],
-      customers : [
-        { 
-          id: "#svg_10", name: "David", photo: '2.jpg', nik: "257102029529258", phone: "0812724829420", mail: "david@mail.com", 
-          sales_name: "Joce", sales_photo: '5.jpg', sales_person: "Agent 32", sales_phone: "08123287429", sales_mail: "agent32@mail.com", deal_date: "14 Agustus 2019",
-          status_unit: "Sold", phone_number: "021-777-666", hard_over_date: "-", id_billing: "001-980-XXX", nopel_ipl: "001-204-XXX", tarif_ipl: "662.500", nilai_ipl: "2.695",
-          top: 'Cash', tod: 'Home Mortgage Express', sales_price: 'Rp. 1.404.750.999', address: 'B16-4',
-        },
-        {
-          id: "#svg_13", name: "Bruce", photo: '3.jpg', nik: "357091250029520", phone: "081376588190", mail: "bruce@mail.com", 
-          sales_name: "Miya", sales_photo: '6.jpg', sales_person: "Agent 15", sales_phone: "08562752920", sales_mail: "agent15@mail.com", deal_date: "29 September 2019",
-          status_unit: "Sold", phone_number: "021-888-123", hard_over_date: "-", id_billing: "001-760-XXX", nopel_ipl: "001-884-XXX", tarif_ipl: "699.000", nilai_ipl: "3.105",
-          top: 'KPR/T 6BLN CCL 18', tod: 'Home Mortgage Express', sales_price: 'Rp. 1.521.220.000', address: 'B16-6',
-        },
-        {
-          id: "#svg_9", name: "John", photo: '1.jpg', nik: "357129992000100", phone: "085628292000", mail: "john@mail.com", 
-          sales_name: "Wika", sales_photo: '8.jpg', sales_person: "Agent 28", sales_phone: "08580205902", sales_mail: "agent28@mail.com", deal_date: "10 September 2019",
-          status_unit: "Booked", phone_number: "021-777-389", hard_over_date: "-", id_billing: "001-290-XXX", nopel_ipl: "001-999-XXX", tarif_ipl: "620.000", nilai_ipl: "2.250",
-          top: '-', tod: 'Home Mortgage Express', sales_price: 'Rp. 1.376.427.999', address: 'B16-5',
-        },
-        {
-          id: "#svg_16", name: "John", photo: '1.jpg', nik: "357129992000100", phone: "085628292000", mail: "john@mail.com", 
-          sales_name: "Wika", sales_photo: '8.jpg', sales_person: "Agent 28", sales_phone: "08580205902", sales_mail: "agent28@mail.com", deal_date: "10 September 2019",
-          status_unit: "Booked", phone_number: "021-777-389", hard_over_date: "-", id_billing: "001-290-XXX", nopel_ipl: "001-999-XXX", tarif_ipl: "620.000", nilai_ipl: "2.250",
-          top: '-', tod: 'Home Mortgage Express', sales_price: 'Rp. 1.376.427.999', address: 'B11-3',
-        },
-        {
-          id: "#svg_21", name: "John", photo: '1.jpg', nik: "357129992000100", phone: "085628292000", mail: "john@mail.com", 
-          sales_name: "Wika", sales_photo: '8.jpg', sales_person: "Agent 28", sales_phone: "08580205902", sales_mail: "agent28@mail.com", deal_date: "10 September 2019",
-          status_unit: "Booked", phone_number: "021-777-389", hard_over_date: "-", id_billing: "001-290-XXX", nopel_ipl: "001-999-XXX", tarif_ipl: "620.000", nilai_ipl: "2.250",
-          top: '-', tod: 'Home Mortgage Express', sales_price: 'Rp. 1.376.427.999', address: 'B11-4',
-        },
-        {
-          id: "#svg_4", name: "-", photo: 'avatar.png', nik: "-", phone: "-", mail: "-", 
-          sales_name: "-", sales_photo: 'avatar.png', sales_person: "-", sales_phone: "-", sales_mail: "-", deal_date: "-",
-          status_unit: "Available", phone_number: "021-777-389", hard_over_date: "-", id_billing: "001-290-XXX", nopel_ipl: "001-999-XXX", tarif_ipl: "620.000", nilai_ipl: "2.250",
-          top: '-', tod: 'Home Mortgage Express', sales_price: 'Rp. 1.376.427.999', address: 'B16-1',
-        },
-        {
-          id: "#svg_5", name: "-", photo: 'avatar.png', nik: "-", phone: "-", mail: "-", 
-          sales_name: "-", sales_photo: 'avatar.png', sales_person: "-", sales_phone: "-", sales_mail: "-", deal_date: "-",
-          status_unit: "Available", phone_number: "021-777-389", hard_over_date: "-", id_billing: "001-290-XXX", nopel_ipl: "001-999-XXX", tarif_ipl: "620.000", nilai_ipl: "2.250",
-          top: '-', tod: 'Home Mortgage Express', sales_price: 'Rp. 1.376.427.999', address: 'B16-2',
-        },
-        {
-          id: "#svg_7", name: "-", photo: 'avatar.png', nik: "-", phone: "-", mail: "-", 
-          sales_name: "-", sales_photo: 'avatar.png', sales_person: "-", sales_phone: "-", sales_mail: "-", deal_date: "-",
-          status_unit: "Available", phone_number: "021-777-389", hard_over_date: "-", id_billing: "001-290-XXX", nopel_ipl: "001-999-XXX", tarif_ipl: "620.000", nilai_ipl: "2.250",
-          top: '-', tod: 'Home Mortgage Express', sales_price: 'Rp. 1.376.427.999', address: 'B16-3',
-        },
-        {
-          id: "#svg_15", name: "-", photo: 'avatar.png', nik: "-", phone: "-", mail: "-", 
-          sales_name: "-", sales_photo: 'avatar.png', sales_person: "-", sales_phone: "-", sales_mail: "-", deal_date: "-",
-          status_unit: "Available", phone_number: "021-777-389", hard_over_date: "-", id_billing: "001-290-XXX", nopel_ipl: "001-999-XXX", tarif_ipl: "620.000", nilai_ipl: "2.250",
-          top: '-', tod: 'Home Mortgage Express', sales_price: 'Rp. 1.376.427.999', address: 'B16-7',
-        },
-        {
-          id: "#svg_14", name: "-", photo: 'avatar.png', nik: "-", phone: "-", mail: "-", 
-          sales_name: "-", sales_photo: 'avatar.png', sales_person: "-", sales_phone: "-", sales_mail: "-", deal_date: "-",
-          status_unit: "Available", phone_number: "021-777-389", hard_over_date: "-", id_billing: "001-290-XXX", nopel_ipl: "001-999-XXX", tarif_ipl: "620.000", nilai_ipl: "2.250",
-          top: '-', tod: 'Home Mortgage Express', sales_price: 'Rp. 1.376.427.999', address: 'B11-1',
-        },
-        {
-          id: "#svg_18", name: "-", photo: 'avatar.png', nik: "-", phone: "-", mail: "-", 
-          sales_name: "-", sales_photo: 'avatar.png', sales_person: "-", sales_phone: "-", sales_mail: "-", deal_date: "-",
-          status_unit: "Available", phone_number: "021-777-389", hard_over_date: "-", id_billing: "001-290-XXX", nopel_ipl: "001-999-XXX", tarif_ipl: "620.000", nilai_ipl: "2.250",
-          top: '-', tod: 'Home Mortgage Express', sales_price: 'Rp. 1.376.427.999', address: 'B11-2',
-        },
-        {
-          id: "#svg_19", name: "-", photo: 'avatar.png', nik: "-", phone: "-", mail: "-", 
-          sales_name: "-", sales_photo: 'avatar.png', sales_person: "-", sales_phone: "-", sales_mail: "-", deal_date: "-",
-          status_unit: "Available", phone_number: "021-777-389", hard_over_date: "-", id_billing: "001-290-XXX", nopel_ipl: "001-999-XXX", tarif_ipl: "620.000", nilai_ipl: "2.250",
-          top: '-', tod: 'Home Mortgage Express', sales_price: 'Rp. 1.376.427.999', address: 'B11-5',
-        },
-        {
-          id: "#svg_22", name: "-", photo: 'avatar.png', nik: "-", phone: "-", mail: "-", 
-          sales_name: "-", sales_photo: 'avatar.png', sales_person: "-", sales_phone: "-", sales_mail: "-", deal_date: "-",
-          status_unit: "Available", phone_number: "021-777-389", hard_over_date: "-", id_billing: "001-290-XXX", nopel_ipl: "001-999-XXX", tarif_ipl: "620.000", nilai_ipl: "2.250",
-          top: '-', tod: 'Home Mortgage Express', sales_price: 'Rp. 1.376.427.999', address: 'B11-6',
-        },
-        {
-          id: "#svg_25", name: "-", photo: 'avatar.png', nik: "-", phone: "-", mail: "-", 
-          sales_name: "-", sales_photo: 'avatar.png', sales_person: "-", sales_phone: "-", sales_mail: "-", deal_date: "-",
-          status_unit: "Available", phone_number: "021-777-389", hard_over_date: "-", id_billing: "001-290-XXX", nopel_ipl: "001-999-XXX", tarif_ipl: "620.000", nilai_ipl: "2.250",
-          top: '-', tod: 'Home Mortgage Express', sales_price: 'Rp. 1.376.427.999', address: 'B11-7',
-        },
-        {}
-      ],
+      datas: CustomerDb,
       customer: {
         name: '-',
         photo: 'avatar.png',
@@ -213,13 +54,35 @@ class Po extends Component {
         sales_price: "-"
       }
     }
-    this.handleClick = this.handleClick.bind(this)
     this.handleClickArea = this.handleClickArea.bind(this)
+    this._onSelect = this._onSelect.bind(this)
+  }
+
+  actionTable = (cell, row) => {
+    return  <div>
+                <Button className="btn-css3 btn-brand icon mr5px btn-sm" onClick={() => { this.handleClickArea(row.id) } }>
+                    <i className="icon-price-tag3"></i>
+                </Button>
+            </div>;
+  }
+
+  icon = (cell, row) => {
+    return  <span><i className={ row.icon }></i> <b>{row.address}</b></span>;
+  }
+
+  status = (cell, row) => {
+    if(row.status_unit === 'Sold') {
+      return  <div style={{width: '60px', backgroundColor: 'rgb(255,72,72,.5)', padding: '2px 0px'}}>{ row.status_unit }</div>;
+    }else if(row.status_unit === 'Booked') {
+      return  <div style={{width: '60px', backgroundColor: 'rgba(255,250,72,.5)', padding: '2px 0px'}}>{ row.status_unit }</div>;
+    }else{
+      return  <div style={{width: '60px', backgroundColor: 'rgba(74,255,160,.5)', padding: '2px 0px'}}>{ row.status_unit }</div>;
+    }
+    
   }
 
   componentDidMount() {
     this.Viewer.fitToViewer();
-    // $('#svg_1').css('background-color', 'red');
   }
 
   changeTool(nextTool) {
@@ -242,17 +105,14 @@ class Po extends Component {
     this.Viewer.zoomOnViewerCenter(1.1)
   }
 
+  selectDropdown = (e) => {
+    this.setState({defaultOption: e});
+  }
+
   handleClickArea = (area) => {
-    // const color = $(area).css("fill");
-    // console.log(color, 'color');
-    // $(this.state.oldAreaID).css({ fill: this.state.oldAreaColor });
-    // this.setState({oldAreaID: area});
-    // console.log(area, 'area')
-    // console.log(this.state.oldAreaID, 'old')
-    // alert(area);
     this.state.customers.map((column, index) => {
       if(column.id === area){
-        $(area).css({ fill: "rgba(74,173,255,.8)" });
+        $(area).css({ fill: "rgba(74,173,255,1)" });
         this.updateCustomer('name', column.name);
         this.updateCustomer('photo', column.photo);
         this.updateCustomer('phone', column.phone);
@@ -276,121 +136,22 @@ class Po extends Component {
         this.updateCustomer('tod', column.tod);
         this.updateCustomer('sales_price', column.sales_price);
       }else{
-        $(area).css({ fill: "rgba(74,173,255,.8)" });
+        $(area).css({ fill: "rgba(74,173,255,1)" });
       }
     });
   }
-
-  onChange = (annotation) => {
-    this.setState({ annotation })
-  }
-
-  handleClick = (annotation) => {
-    // console.log(annotation, 'x');
-    
-  }
-
-  onSubmit = (annotation) => {
-    const { geometry, data } = annotation;
-
-    this.setState({
-      annotation: {},
-      annotations: this.state.annotations.concat({
-        geometry,
-        data: {
-          ...data,
-          id: Math.random()
-        }
-      })
-    });
-  }
-
-  getInitialState = () => {
-		return { hoveredArea: null, msg: null, moveMsg: null };
-  }
-
+  
   updateCustomer = (name, value) => {
     this.setState( prevState => ({customer :
       {...prevState.customer, [name]: value}
     }) );
   }
+
+  _onSelect (option) {
+    console.log('You selected ', option.label)
+    this.setState({selected: option})
+  }
     
-	clicked = (area) => {
-    // this.setState({blocking: true});
-    // alert('You clicked ' + area.desc);
-    this.state.customers.map((column, index) => {
-      if(column.id === area.desc){
-        this.updateCustomer('name', column.name);
-        this.updateCustomer('photo', column.photo);
-        this.updateCustomer('phone', column.phone);
-        this.updateCustomer('nik', column.nik);
-        this.updateCustomer('mail', column.mail);
-        this.updateCustomer('address', column.id);
-        this.updateCustomer('sales_name', column.sales_name);
-        this.updateCustomer('sales_photo', column.sales_photo);
-        this.updateCustomer('sales_person', column.sales_person);
-        this.updateCustomer('sales_mail', column.sales_mail);
-        this.updateCustomer('sales_phone', column.sales_phone);
-        this.updateCustomer('deal_date', column.deal_date);
-        this.updateCustomer('status_unit', column.status_unit);
-        this.updateCustomer('phone_number', column.phone_number);
-        this.updateCustomer('hard_over_date', column.hard_over_date);
-        this.updateCustomer('id_billing', column.id_billing);
-        this.updateCustomer('nopel_ipl', column.nopel_ipl);
-        this.updateCustomer('tarif_ipl', column.tarif_ipl);
-        this.updateCustomer('nilai_ipl', column.nilai_ipl);
-        this.updateCustomer('top', column.top);
-        this.updateCustomer('tod', column.tod);
-        this.updateCustomer('sales_price', column.sales_price);
-      }
-    });
-  }
-  
-	clickedOutside = (evt) => {
-		this.updateCustomer('name', '-');
-    this.updateCustomer('photo', 'avatar.png');
-    this.updateCustomer('phone', '-');
-    this.updateCustomer('nik', '-');
-    this.updateCustomer('mail', '-');
-    this.updateCustomer('address', '-');
-    this.updateCustomer('sales_name', '-');
-    this.updateCustomer('sales_photo', 'avatar.png');
-    this.updateCustomer('sales_person', '-');
-    this.updateCustomer('sales_mail', '-');
-    this.updateCustomer('sales_phone', '-');
-    this.updateCustomer('deal_date', '-');
-    this.updateCustomer('status_unit', '-');
-    this.updateCustomer('phone_number', '-');
-    this.updateCustomer('hard_over_date', '-');
-    this.updateCustomer('id_billing', '-');
-    this.updateCustomer('nopel_ipl', '-');
-    this.updateCustomer('tarif_ipl', '-');
-    this.updateCustomer('nilai_ipl', '-');
-    this.updateCustomer('top', '-');
-    this.updateCustomer('tod', '-');
-    this.updateCustomer('sales_price', '-');
-  }
-  
-	moveOnImage = (evt) => {
-		// console.log(evt);
-  }
-  
-	enterArea = (area) => {
-		// console.log(area);
-  }
-  
-	leaveArea = (area) => {
-		// console.log(area);
-  }
-  
-	moveOnArea = (area, evt) => {
-		// console.log(area)
-	}
-
-	getTipPosition = (area) => {
-		// console.log(area)
-	}
-
   render() {
     $('#svg_4, #svg_5, #svg_7, #svg_15, #svg_14, #svg_18, #svg_19, #svg_22, #svg_25').css({ fill: "rgba(74,255,160,.5)" });
     $('#svg_10, #svg_13').css({ fill: "rgb(255,72,72,.5)" });
@@ -484,14 +245,15 @@ class Po extends Component {
       ]
     };
 
-    const MAP = {
-      name: "my-map",
-      areas: [
-        { name: "1", desc: "B15-6", shape: "rect", coords: [255,138,245,123], preFillColor: "rgba(249,194,226, 0.9)", fillColor: "red"  },
-        { name: "2", desc: "B8-6", shape: "rect", coords: [257,202,247,187], preFillColor: "rgba(171,221,225, 0.9)", fillColor: "red"  },
-        { name: "3", desc: "B6-6", shape: "rect", coords: [259,235,248,218], preFillColor: "rgba(171,221,225, 0.9)", fillColor: "red"  }
-      ]
-    }
+    const options = [
+      { value: 'S1', label: 'Tabebuya, BSD City' },
+      { value: 'S2', label: 'Sevilla, BSD City' },
+      { value: 'S3', label: 'Simplicity, BSD City' },
+      { value: 'S4', label: 'Hylands, BSD City' },
+      { value: 'S5', label: 'Castilla, BSD City' },
+      { value: 'S6', label: 'Eminent, BSD City' },
+    ];
+    const defaultOption = this.state.selected;
     
     return (
       <div className="animated fadeIn">
@@ -513,13 +275,17 @@ class Po extends Component {
               <div style={{backgroundColor: '#fcfcfc', float: 'left', border: '1px solid #C8CED3', width:'50px', height: '40px', textAlign:'center'}}>
                 <i className="icon-info22" style={{color: '#333', fontSize: '22px', lineHeight: '45px', cursor: 'pointer'}}></i>
               </div>
+              <div style={{backgroundColor: '#fcfcfc', float: 'left', border: '1px solid #C8CED3', height: '40px', textAlign:'center',
+                lineHeight: '35px', padding: '0 15px'}}>
+                <b>Select Cluster : </b>
+                <Dropdown className='reactdrop' controlClassName='controlreactdrop'  options={options} onChange={this._onSelect} value={defaultOption} placeholder="Select an option" />
+              </div>
             </Col>
-            <Col xs="12" sm="12" md="12" style={{marginBottom: '20px', minWidth: '370px'}}>
-              {/* <div className="titleAnn"><i className="icon-direction"></i> Provense Suite</div> */}
+            <Col xs="12" sm="12" md="12" style={{minWidth: '370px'}}>
               <Row>
-                <Col xs="12" sm="12" md="12" lg="6" style={{marginBottom: '20px'}}>
+                <Col xs="12" sm="12" md="12" lg="6" style={{marginBottom: '15px'}}>
                   <div className="center-block" >
-                    <div className="titleAnn" style={{width: '376px'}}><i className="icon-direction"></i> Provense Suite</div>
+                    <div className="titleAnn" style={{width: '374px'}}><i className="icon-direction"></i> Provense Suite</div>
                     <div className="img-plan">
                       <ReactSvgPanZoomLoader src={"/assets/img/sample.svg"} 
                         proxy={
@@ -560,98 +326,75 @@ class Po extends Component {
                                 {content}
                             </svg>  
                         </ReactSVGPanZoom>
-                    )}/>
-                      {/* <ImageMapper src={"/assets/img/sample.jpeg"} map={MAP} width={370}
-                        onClick={(area) => this.clicked(area)}
-                        onMouseEnter={(area) => this.enterArea(area)}
-                        onMouseLeave={(area) => this.leaveArea(area)}
-                        onMouseMove={(area, _, evt) => this.moveOnArea(area, evt)}
-                        onImageClick={(evt) => this.clickedOutside(evt)}
-                        onImageMouseMove={(evt) => this.moveOnImage(evt)}
-                      />
-                      {
-                        this.state.hoveredArea &&
-                        <span className="tooltip"
-                            style={{ ...this.getTipPosition(this.state.hoveredArea)}}>
-                          { this.state.hoveredArea && this.state.hoveredArea.name}
-                        </span>
-                      } */}
+                      )}/>
                     </div>
                   </div>
                 </Col>
                 <Col xs="12" sm="12" md="12" lg="6">
                   <Row>
-                    <Col xs="12" sm="12" md="12">
+                    <Col xs="12" sm="12" md="12" lg="6">
                       <Card className="card-accent-primary">
                         <CardHeader>
-                          <i className="icon-user"></i>Customer
+                          <i className="icon-user"></i>Site Plan
                         </CardHeader>
-                          <CardBody>
-                            <img src={ '../../assets/img/avatars/' + this.state.customer.photo} className="img-card" alt="avatar" />
-                            <div className="separator-card">
-                              <div className="leftText">Name</div>
-                              <div className="rightText">: {this.state.customer.name} </div>
-                              <br/>
-                              <div className="leftText">NIK</div>
-                              <div className="rightText">: {this.state.customer.nik} </div>
-                              <br/>
-                              <div className="leftText">Phone</div>
-                              <div className="rightText">: {this.state.customer.phone} </div>
-                              <br/>
-                              <div className="leftText">Email</div>
-                              <div className="rightText">: {this.state.customer.mail} </div>
-                              <br/>
-                              <div className="leftText">Address</div>
-                              <div className="rightText">: <b>{this.state.customer.address}</b> </div>
-                            </div>
+                          <CardBody className="card-body-nopad">
+                            <CommonTable 
+                              tableHead={ this.state.tableHead }
+                              datas={ this.state.datas }
+                              action={ this.handleClickArea }
+                            />
                           </CardBody>
                       </Card>
                     </Col>
-                    <Col xs="12" sm="12" md="12">
-                      <Card className="card-accent-primary">
-                        <CardHeader>
-                          <i className="icon-user"></i>Sales Person
-                        </CardHeader>
-                          <CardBody>
-                            <img src={ '../../assets/img/avatars/' + this.state.customer.sales_photo } className="img-card" alt="avatar" />
-                            <div className="separator-card">
-                              <div className="leftText">Name</div>
-                              <div className="rightText">: {this.state.customer.sales_name} </div>
-                              <br/>
-                              <div className="leftText">Sales Person</div>
-                              <div className="rightText">: {this.state.customer.sales_person} </div>
-                              <br/>
-                              <div className="leftText">Phone</div>
-                              <div className="rightText">: {this.state.customer.sales_phone} </div>
-                              <br/>
-                              <div className="leftText">Email</div>
-                              <div className="rightText">: {this.state.customer.sales_mail} </div>
-                              <br/>
-                              <div className="leftText">Deal Date</div>
-                              <div className="rightText">: {this.state.customer.deal_date} </div>
-                            </div>
-                          </CardBody>
-                      </Card>
+                    <Col xs="12" sm="12" md="12" lg="6">
+                      <Row>
+                        <Col xs="12" sm="12" md="12" lg="12">
+                          <Card className="card-accent-primary">
+                            <CardHeader>
+                              <i className="icon-user"></i>Customer
+                            </CardHeader>
+                              <CardBody>
+                                <img src={ '../../assets/img/avatars/' + this.state.customer.photo} className="img-card" alt="avatar" />
+                                <div className="separator-card">
+                                  <div className="leftText"><i className="icon-user"></i> {this.state.customer.name}</div>
+                                  <br/>
+                                  <div className="leftText"><i className="icon-vcard"></i> {this.state.customer.nik}</div>
+                                  <br/>
+                                  <div className="leftText"><i className="icon-phone"></i> {this.state.customer.phone}</div>
+                                  <br/>
+                                  <div className="leftText"><i className="icon-mail5"></i> {this.state.customer.mail}</div>
+                                  <br/>
+                                  <div className="leftText"><i className="icon-location4"></i> <b>{this.state.customer.address}</b></div>
+                                </div>
+                              </CardBody>
+                          </Card>
+                        </Col>
+                        <Col xs="12" sm="12" md="12" lg="12">
+                          <Card className="card-accent-primary">
+                            <CardHeader>
+                              <i className="icon-user"></i>Sales
+                            </CardHeader>
+                              <CardBody>
+                                <img src={ '../../assets/img/avatars/' + this.state.customer.sales_photo } className="img-card" alt="avatar" />
+                                <div className="separator-card">
+                                  <div className="leftText"><i className="icon-user"></i> {this.state.customer.sales_name}</div>
+                                  <br/>
+                                  <div className="leftText"><i className="icon-vcard"></i> {this.state.customer.sales_person}</div>
+                                  <br/>
+                                  <div className="leftText"><i className="icon-phone"></i> {this.state.customer.sales_phone}</div>
+                                  <br/>
+                                  <div className="leftText"><i className="icon-mail5"></i> {this.state.customer.sales_mail}</div>
+                                  <br/>
+                                  <div className="leftText"><i className="icon-calendar"></i> {this.state.customer.deal_date}</div>
+                                </div>
+                              </CardBody>
+                          </Card>
+                        </Col>
+                      </Row>
                     </Col>
                   </Row>
                 </Col>
               </Row>
-              
-              {/* <div className="bodyAnn">
-                <Annotation
-                  src={"/assets/img/sample.jpeg"}
-                  alt='Site Plan'
-                  annotations={this.state.annotations}
-                  activeAnnotations={this.state.activeAnnotation}
-                  type={RectangleSelector.TYPE}
-                  value={this.state.annotation}
-                  onChange={this.onChange}
-                  onSubmit={this.onSubmit}
-                  onClick={this.handleClick}
-                  disableAnnotation={false}
-                  disableOverlay={true}
-                />
-              </div> */}
             </Col>
             <Col xs="12" sm="12" md="12">
               <Row>

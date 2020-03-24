@@ -15,17 +15,18 @@ const CommonTable = (props) => {
     return(
         <div>
             <div className="buttonTable">
-                <Button className="btn-vine btn-brand btn-sm" onClick={ e => handleClick(e, 'download', '') }>
+                {/* <Button className="btn-vine btn-brand btn-sm" onClick={ e => handleClick(e, 'download', '') }>
                     <i className="icon-file-excel"></i>
                     <span>Download</span>
                 </Button>
                 <Button className="btn-twitter btn-brand btn-sm"  onClick={ e => handleClick(e, 'add', '') }>
                     <i className="icon-plus-circle2"></i>
                     <span>Add Data</span>
-                </Button>
+                </Button> */}
             </div>
-            <BootstrapTable data={ props.datas } striped hover pagination version='4' 
-                search={ true }
+            <BootstrapTable data={ props.datas } striped hover version='4' 
+                search={ false }
+                height={360}
                 options={ tableOptions }
                 keyField='id'>
                     {

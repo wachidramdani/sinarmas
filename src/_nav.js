@@ -16,12 +16,12 @@ export default {
     },
     {
       name: 'Menu 1',
-      url: '/planning/unit',
+      url: '#',
       icon: 'icon-star-empty3',
     },
     {
       name: 'Menu 2',
-      url: '/planning/unit',
+      url: '#',
       icon: 'icon-alarm',
     },
     {
@@ -35,7 +35,7 @@ export default {
     },
     {
       name: 'Menu 3',
-      url: '/planning/unit',
+      url: '#',
       icon: 'icon-cube3',
     },
     {
@@ -49,7 +49,7 @@ export default {
     },
     {
       name: 'Menu 4',
-      url: '/planning/unit',
+      url: '*',
       icon: 'icon-users',
     },
     {
