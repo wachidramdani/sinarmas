@@ -2,18 +2,27 @@ import React, { Component } from 'react';
 import { Table, Card, Form, FormGroup, Label, Input, Button, CardBody, CardHeader, Col, Row, Modal, ModalHeader, ModalBody, Collapse } from 'reactstrap';
 import Annotation from 'react-image-annotation';
 import {PointSelector, RectangleSelector} from 'react-image-annotation/lib/selectors';
+import { ReactSVG } from 'react-svg'
+import {INITIAL_VALUE, ReactSVGPanZoom, TOOL_NONE} from 'react-svg-pan-zoom';
+import { ReactComponent as YSvg } from '../../assets/img/sample.svg';
+import {ReactSvgPanZoomLoader, SvgLoaderSelectElement} from 'react-svg-pan-zoom-loader'
 import 'react-dropdown/style.css'
 import { Bar, Line } from 'react-chartjs-2';
 import { CustomTooltips } from '@coreui/coreui-plugin-chartjs-custom-tooltips';
 import BlockUi from 'react-block-ui';
 import 'react-block-ui/style.css';
 import ImageMapper from "react-image-mapper";
+import $ from 'jquery';
 
 class Po extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      oldAreaID: '',
+      oldAreaColor: '',
       blocking: false,
+      tool: TOOL_NONE,
+      value: INITIAL_VALUE,
       annotations: [
         {
           geometry: {
@@ -99,23 +108,90 @@ class Po extends Component {
       ],
       customers : [
         { 
-          id: "B15-6", name: "David", photo: 'avatar2.jpg', nik: "257102029529258", phone: "0812724829420", mail: "david@mail.com", 
-          sales_name: "Joce", sales_photo: 'avatar1.jpg', sales_person: "Agent 32", sales_phone: "08123287429", sales_mail: "agent32@mail.com", deal_date: "14 Agustus 2019",
+          id: "#svg_10", name: "David", photo: '2.jpg', nik: "257102029529258", phone: "0812724829420", mail: "david@mail.com", 
+          sales_name: "Joce", sales_photo: '5.jpg', sales_person: "Agent 32", sales_phone: "08123287429", sales_mail: "agent32@mail.com", deal_date: "14 Agustus 2019",
           status_unit: "Sold", phone_number: "021-777-666", hard_over_date: "-", id_billing: "001-980-XXX", nopel_ipl: "001-204-XXX", tarif_ipl: "662.500", nilai_ipl: "2.695",
-          top: 'Cash', tod: 'Home Mortgage Express', sales_price: 'Rp. 1.404.750.999'
+          top: 'Cash', tod: 'Home Mortgage Express', sales_price: 'Rp. 1.404.750.999', address: 'B16-4',
         },
         {
-          id: "B8-6", name: "Bruce", photo: 'avatar3.jpg', nik: "357091250029520", phone: "081376588190", mail: "bruce@mail.com", 
-          sales_name: "Miya", sales_photo: 'avatar5.jpg', sales_person: "Agent 15", sales_phone: "08562752920", sales_mail: "agent15@mail.com", deal_date: "29 September 2019",
-          status_unit: "Payment Process", phone_number: "021-888-123", hard_over_date: "-", id_billing: "001-760-XXX", nopel_ipl: "001-884-XXX", tarif_ipl: "699.000", nilai_ipl: "3.105",
-          top: 'KPR/T 6BLN CCL 18', tod: 'Home Mortgage Express', sales_price: 'Rp. 1.521.220.000'
+          id: "#svg_13", name: "Bruce", photo: '3.jpg', nik: "357091250029520", phone: "081376588190", mail: "bruce@mail.com", 
+          sales_name: "Miya", sales_photo: '6.jpg', sales_person: "Agent 15", sales_phone: "08562752920", sales_mail: "agent15@mail.com", deal_date: "29 September 2019",
+          status_unit: "Sold", phone_number: "021-888-123", hard_over_date: "-", id_billing: "001-760-XXX", nopel_ipl: "001-884-XXX", tarif_ipl: "699.000", nilai_ipl: "3.105",
+          top: 'KPR/T 6BLN CCL 18', tod: 'Home Mortgage Express', sales_price: 'Rp. 1.521.220.000', address: 'B16-6',
         },
         {
-          id: "B6-6", name: "John", photo: 'avatar4.jpg', nik: "357129992000100", phone: "085628292000", mail: "john@mail.com", 
-          sales_name: "Wika", sales_photo: 'avatar6.jpg', sales_person: "Agent 28", sales_phone: "08580205902", sales_mail: "agent28@mail.com", deal_date: "10 September 2019",
+          id: "#svg_9", name: "John", photo: '1.jpg', nik: "357129992000100", phone: "085628292000", mail: "john@mail.com", 
+          sales_name: "Wika", sales_photo: '8.jpg', sales_person: "Agent 28", sales_phone: "08580205902", sales_mail: "agent28@mail.com", deal_date: "10 September 2019",
           status_unit: "Booked", phone_number: "021-777-389", hard_over_date: "-", id_billing: "001-290-XXX", nopel_ipl: "001-999-XXX", tarif_ipl: "620.000", nilai_ipl: "2.250",
-          top: '-', tod: 'Home Mortgage Express', sales_price: 'Rp. 1.376.427.999'
+          top: '-', tod: 'Home Mortgage Express', sales_price: 'Rp. 1.376.427.999', address: 'B16-5',
         },
+        {
+          id: "#svg_16", name: "John", photo: '1.jpg', nik: "357129992000100", phone: "085628292000", mail: "john@mail.com", 
+          sales_name: "Wika", sales_photo: '8.jpg', sales_person: "Agent 28", sales_phone: "08580205902", sales_mail: "agent28@mail.com", deal_date: "10 September 2019",
+          status_unit: "Booked", phone_number: "021-777-389", hard_over_date: "-", id_billing: "001-290-XXX", nopel_ipl: "001-999-XXX", tarif_ipl: "620.000", nilai_ipl: "2.250",
+          top: '-', tod: 'Home Mortgage Express', sales_price: 'Rp. 1.376.427.999', address: 'B11-3',
+        },
+        {
+          id: "#svg_21", name: "John", photo: '1.jpg', nik: "357129992000100", phone: "085628292000", mail: "john@mail.com", 
+          sales_name: "Wika", sales_photo: '8.jpg', sales_person: "Agent 28", sales_phone: "08580205902", sales_mail: "agent28@mail.com", deal_date: "10 September 2019",
+          status_unit: "Booked", phone_number: "021-777-389", hard_over_date: "-", id_billing: "001-290-XXX", nopel_ipl: "001-999-XXX", tarif_ipl: "620.000", nilai_ipl: "2.250",
+          top: '-', tod: 'Home Mortgage Express', sales_price: 'Rp. 1.376.427.999', address: 'B11-4',
+        },
+        {
+          id: "#svg_4", name: "-", photo: 'avatar.png', nik: "-", phone: "-", mail: "-", 
+          sales_name: "-", sales_photo: 'avatar.png', sales_person: "-", sales_phone: "-", sales_mail: "-", deal_date: "-",
+          status_unit: "Available", phone_number: "021-777-389", hard_over_date: "-", id_billing: "001-290-XXX", nopel_ipl: "001-999-XXX", tarif_ipl: "620.000", nilai_ipl: "2.250",
+          top: '-', tod: 'Home Mortgage Express', sales_price: 'Rp. 1.376.427.999', address: 'B16-1',
+        },
+        {
+          id: "#svg_5", name: "-", photo: 'avatar.png', nik: "-", phone: "-", mail: "-", 
+          sales_name: "-", sales_photo: 'avatar.png', sales_person: "-", sales_phone: "-", sales_mail: "-", deal_date: "-",
+          status_unit: "Available", phone_number: "021-777-389", hard_over_date: "-", id_billing: "001-290-XXX", nopel_ipl: "001-999-XXX", tarif_ipl: "620.000", nilai_ipl: "2.250",
+          top: '-', tod: 'Home Mortgage Express', sales_price: 'Rp. 1.376.427.999', address: 'B16-2',
+        },
+        {
+          id: "#svg_7", name: "-", photo: 'avatar.png', nik: "-", phone: "-", mail: "-", 
+          sales_name: "-", sales_photo: 'avatar.png', sales_person: "-", sales_phone: "-", sales_mail: "-", deal_date: "-",
+          status_unit: "Available", phone_number: "021-777-389", hard_over_date: "-", id_billing: "001-290-XXX", nopel_ipl: "001-999-XXX", tarif_ipl: "620.000", nilai_ipl: "2.250",
+          top: '-', tod: 'Home Mortgage Express', sales_price: 'Rp. 1.376.427.999', address: 'B16-3',
+        },
+        {
+          id: "#svg_15", name: "-", photo: 'avatar.png', nik: "-", phone: "-", mail: "-", 
+          sales_name: "-", sales_photo: 'avatar.png', sales_person: "-", sales_phone: "-", sales_mail: "-", deal_date: "-",
+          status_unit: "Available", phone_number: "021-777-389", hard_over_date: "-", id_billing: "001-290-XXX", nopel_ipl: "001-999-XXX", tarif_ipl: "620.000", nilai_ipl: "2.250",
+          top: '-', tod: 'Home Mortgage Express', sales_price: 'Rp. 1.376.427.999', address: 'B16-7',
+        },
+        {
+          id: "#svg_14", name: "-", photo: 'avatar.png', nik: "-", phone: "-", mail: "-", 
+          sales_name: "-", sales_photo: 'avatar.png', sales_person: "-", sales_phone: "-", sales_mail: "-", deal_date: "-",
+          status_unit: "Available", phone_number: "021-777-389", hard_over_date: "-", id_billing: "001-290-XXX", nopel_ipl: "001-999-XXX", tarif_ipl: "620.000", nilai_ipl: "2.250",
+          top: '-', tod: 'Home Mortgage Express', sales_price: 'Rp. 1.376.427.999', address: 'B11-1',
+        },
+        {
+          id: "#svg_18", name: "-", photo: 'avatar.png', nik: "-", phone: "-", mail: "-", 
+          sales_name: "-", sales_photo: 'avatar.png', sales_person: "-", sales_phone: "-", sales_mail: "-", deal_date: "-",
+          status_unit: "Available", phone_number: "021-777-389", hard_over_date: "-", id_billing: "001-290-XXX", nopel_ipl: "001-999-XXX", tarif_ipl: "620.000", nilai_ipl: "2.250",
+          top: '-', tod: 'Home Mortgage Express', sales_price: 'Rp. 1.376.427.999', address: 'B11-2',
+        },
+        {
+          id: "#svg_19", name: "-", photo: 'avatar.png', nik: "-", phone: "-", mail: "-", 
+          sales_name: "-", sales_photo: 'avatar.png', sales_person: "-", sales_phone: "-", sales_mail: "-", deal_date: "-",
+          status_unit: "Available", phone_number: "021-777-389", hard_over_date: "-", id_billing: "001-290-XXX", nopel_ipl: "001-999-XXX", tarif_ipl: "620.000", nilai_ipl: "2.250",
+          top: '-', tod: 'Home Mortgage Express', sales_price: 'Rp. 1.376.427.999', address: 'B11-5',
+        },
+        {
+          id: "#svg_22", name: "-", photo: 'avatar.png', nik: "-", phone: "-", mail: "-", 
+          sales_name: "-", sales_photo: 'avatar.png', sales_person: "-", sales_phone: "-", sales_mail: "-", deal_date: "-",
+          status_unit: "Available", phone_number: "021-777-389", hard_over_date: "-", id_billing: "001-290-XXX", nopel_ipl: "001-999-XXX", tarif_ipl: "620.000", nilai_ipl: "2.250",
+          top: '-', tod: 'Home Mortgage Express', sales_price: 'Rp. 1.376.427.999', address: 'B11-6',
+        },
+        {
+          id: "#svg_25", name: "-", photo: 'avatar.png', nik: "-", phone: "-", mail: "-", 
+          sales_name: "-", sales_photo: 'avatar.png', sales_person: "-", sales_phone: "-", sales_mail: "-", deal_date: "-",
+          status_unit: "Available", phone_number: "021-777-389", hard_over_date: "-", id_billing: "001-290-XXX", nopel_ipl: "001-999-XXX", tarif_ipl: "620.000", nilai_ipl: "2.250",
+          top: '-', tod: 'Home Mortgage Express', sales_price: 'Rp. 1.376.427.999', address: 'B11-7',
+        },
+        {}
       ],
       customer: {
         name: '-',
@@ -143,14 +219,71 @@ class Po extends Component {
       }
     }
     this.handleClick = this.handleClick.bind(this)
+    this.handleClickArea = this.handleClickArea.bind(this)
   }
 
   componentDidMount() {
-    // $('.bodyAnn').click(function(e) {
-    //   var offset = $(this).offset();
-    //   alert(e.pageX - offset.left);
-    //   alert(e.pageY - offset.top);
-    // });
+    this.Viewer.fitToViewer();
+    // $('#svg_1').css('background-color', 'red');
+  }
+
+  changeTool(nextTool) {
+    this.setState({tool: nextTool})
+  }
+
+  changeValue(nextValue) {
+    this.setState({value: nextValue})
+  }
+
+  fitToViewer() {
+    this.Viewer.fitToViewer()
+  }
+
+  fitSelection() {
+    this.Viewer.fitSelection(40, 40, 200, 200)
+  }
+
+  zoomOnViewerCenter() {
+    this.Viewer.zoomOnViewerCenter(1.1)
+  }
+
+  handleClickArea = (area) => {
+    // const color = $(area).css("fill");
+    // console.log(color, 'color');
+    // $(this.state.oldAreaID).css({ fill: this.state.oldAreaColor });
+    // this.setState({oldAreaID: area});
+    // console.log(area, 'area')
+    // console.log(this.state.oldAreaID, 'old')
+    // alert(area);
+    this.state.customers.map((column, index) => {
+      if(column.id === area){
+        $(area).css({ fill: "rgba(74,173,255,.8)" });
+        this.updateCustomer('name', column.name);
+        this.updateCustomer('photo', column.photo);
+        this.updateCustomer('phone', column.phone);
+        this.updateCustomer('nik', column.nik);
+        this.updateCustomer('mail', column.mail);
+        this.updateCustomer('address', column.address);
+        this.updateCustomer('sales_name', column.sales_name);
+        this.updateCustomer('sales_photo', column.sales_photo);
+        this.updateCustomer('sales_person', column.sales_person);
+        this.updateCustomer('sales_mail', column.sales_mail);
+        this.updateCustomer('sales_phone', column.sales_phone);
+        this.updateCustomer('deal_date', column.deal_date);
+        this.updateCustomer('status_unit', column.status_unit);
+        this.updateCustomer('phone_number', column.phone_number);
+        this.updateCustomer('hard_over_date', column.hard_over_date);
+        this.updateCustomer('id_billing', column.id_billing);
+        this.updateCustomer('nopel_ipl', column.nopel_ipl);
+        this.updateCustomer('tarif_ipl', column.tarif_ipl);
+        this.updateCustomer('nilai_ipl', column.nilai_ipl);
+        this.updateCustomer('top', column.top);
+        this.updateCustomer('tod', column.tod);
+        this.updateCustomer('sales_price', column.sales_price);
+      }else{
+        $(area).css({ fill: "rgba(74,173,255,.8)" });
+      }
+    });
   }
 
   onChange = (annotation) => {
@@ -264,6 +397,9 @@ class Po extends Component {
 	}
 
   render() {
+    $('#svg_4, #svg_5, #svg_7, #svg_15, #svg_14, #svg_18, #svg_19, #svg_22, #svg_25').css({ fill: "rgba(74,255,160,.5)" });
+    $('#svg_10, #svg_13').css({ fill: "rgb(255,72,72,.5)" });
+    $('#svg_9, #svg_16, #svg_21').css({ fill: "rgba(255,250,72,.5)" });
     const bar = {
       labels: ['48', '49', '50', '51'],
       datasets: [
@@ -390,7 +526,47 @@ class Po extends Component {
                   <div className="center-block" >
                     <div className="titleAnn" style={{width: '376px'}}><i className="icon-direction"></i> Provense Suite</div>
                     <div className="img-plan">
-                      <ImageMapper src={"/assets/img/sample.jpeg"} map={MAP} width={370}
+                      <ReactSvgPanZoomLoader src={"/assets/img/sample.svg"} 
+                        proxy={
+                          <>
+                            <SvgLoaderSelectElement selector="#svg_4" onClick={e => this.handleClickArea("#svg_4")} />
+                            <SvgLoaderSelectElement selector="#svg_5" onClick={e => this.handleClickArea("#svg_5")} />
+                            <SvgLoaderSelectElement selector="#svg_7" onClick={e => this.handleClickArea("#svg_7")} />
+                            <SvgLoaderSelectElement selector="#svg_10" onClick={e => this.handleClickArea("#svg_10")} />
+                            <SvgLoaderSelectElement selector="#svg_9" onClick={e => this.handleClickArea("#svg_9")} />
+                            <SvgLoaderSelectElement selector="#svg_13" onClick={e => this.handleClickArea("#svg_13")} />
+                            <SvgLoaderSelectElement selector="#svg_15" onClick={e => this.handleClickArea("#svg_15")} />
+                            <SvgLoaderSelectElement selector="#svg_14" onClick={e => this.handleClickArea("#svg_14")} />
+                            <SvgLoaderSelectElement selector="#svg_18" onClick={e => this.handleClickArea("#svg_18")} />
+                            <SvgLoaderSelectElement selector="#svg_16" onClick={e => this.handleClickArea("#svg_16")} />
+                            <SvgLoaderSelectElement selector="#svg_21" onClick={e => this.handleClickArea("#svg_21")} />
+                            <SvgLoaderSelectElement selector="#svg_19" onClick={e => this.handleClickArea("#svg_19")} />
+                            <SvgLoaderSelectElement selector="#svg_22" onClick={e => this.handleClickArea("#svg_22")} />
+                            <SvgLoaderSelectElement selector="#svg_25" onClick={e => this.handleClickArea("#svg_25")} />
+                          </>
+                        }
+                        render= {(content) => (
+                        <ReactSVGPanZoom
+                          width={370} height={360}
+                          ref={Viewer => this.Viewer = Viewer}
+                          tool={this.state.tool} onChangeTool={tool => this.changeTool(tool)}
+                          value={this.state.value} onChangeValue={value => this.changeValue(value)}
+                          detectAutoPan={false}
+                          // onZoom={e => console.log('zoom')}
+                          // onPan={e => console.log('pan')}
+                          // onClick={
+                            // (e) => {
+                            //   if (e.target.id!='') alert(e.target.id)
+                            // }
+                          //   event => console.log('click', event.target)
+                          // }
+                        >
+                            <svg width={500} height={488} >
+                                {content}
+                            </svg>  
+                        </ReactSVGPanZoom>
+                    )}/>
+                      {/* <ImageMapper src={"/assets/img/sample.jpeg"} map={MAP} width={370}
                         onClick={(area) => this.clicked(area)}
                         onMouseEnter={(area) => this.enterArea(area)}
                         onMouseLeave={(area) => this.leaveArea(area)}
@@ -404,7 +580,7 @@ class Po extends Component {
                             style={{ ...this.getTipPosition(this.state.hoveredArea)}}>
                           { this.state.hoveredArea && this.state.hoveredArea.name}
                         </span>
-                      }
+                      } */}
                     </div>
                   </div>
                 </Col>
@@ -495,15 +671,15 @@ class Po extends Component {
                             {(() => {
                               if (this.state.customer.status_unit === 'Sold') {
                                 return (
-                                  <label style={{backgroundColor: 'green', padding: '0px 6px', marginBottom: '0', color: 'white'}}>{this.state.customer.status_unit}</label>
+                                  <label style={{backgroundColor: '#FF4848', padding: '0px 6px', marginBottom: '0', color: 'white'}}>{this.state.customer.status_unit}</label>
                                 )
                               } else if (this.state.customer.status_unit === 'Booked') {
                                 return (
-                                  <label style={{backgroundColor: 'orange', padding: '0px 6px', marginBottom: '0'}}>{this.state.customer.status_unit}</label>
+                                  <label style={{backgroundColor: '#FFFA48', padding: '0px 6px', marginBottom: '0'}}>{this.state.customer.status_unit}</label>
                                 )
-                              } else if (this.state.customer.status_unit === 'Payment Process') {
+                              } else if (this.state.customer.status_unit === 'Available') {
                                 return (
-                                  <label style={{backgroundColor: 'blue', padding: '0px 6px', marginBottom: '0', color: 'white'}}>{this.state.customer.status_unit}</label>
+                                  <label style={{backgroundColor: '#4AFFA0', padding: '0px 6px', marginBottom: '0', color: 'white'}}>{this.state.customer.status_unit}</label>
                                 )
                               } else {
                                 return (
