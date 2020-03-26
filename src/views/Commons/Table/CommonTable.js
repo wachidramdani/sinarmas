@@ -12,16 +12,6 @@ const CommonTable = (props) => {
         props.action(tipe, val);
     }
 
-    const qualityType = {
-        0: 'Sold',
-        1: 'Booked',
-        2: 'Available'
-    };
-      
-    function enumFormatter(cell, row, enumObject) {
-        return enumObject[cell];
-    }
-
     function actionTable (cell, row) {
         return  <div>
                     <Button className="btn-css3 btn-brand icon mr5px btn-sm" onClick={() => { props.action(row.id) } }>
@@ -36,18 +26,27 @@ const CommonTable = (props) => {
 
     function status (cell, row) {
         if(row.status_unit === 'Sold') {
-          return  <div style={{width: '60px', backgroundColor: 'rgb(255,72,72,.5)', padding: '2px 0px'}}>{ row.status_unit }</div>;
+          return  <div style={{width: '60px', backgroundColor: 'rgb(255,72,72,.5)', padding: '2px 0px',}}>{ row.status_unit }</div>;
         }else if(row.status_unit === 'Booked') {
-          return  <div style={{width: '60px', backgroundColor: 'rgba(255,250,72,.5)', padding: '2px 0px'}}>{ row.status_unit }</div>;
+          return  <div style={{width: '60px', backgroundColor: 'rgba(255,250,72,.5)', padding: '2px 0px',}}>{ row.status_unit }</div>;
         }else{
-          return  <div style={{width: '60px', backgroundColor: 'rgba(74,255,160,.5)', padding: '2px 0px'}}>{ row.status_unit }</div>;
+          return  <div style={{width: '60px', backgroundColor: 'rgba(74,255,160,.5)', padding: '2px 0px',}}>{ row.status_unit }</div>;
         }
         
     }
 
+    const options = {
+        noDataText: 'There is no data to display.', 
+        clearSearch: true,
+        onRowClick: function(row) {
+            props.action(row.id)
+        }
+    };
+
+
     return(
         <div>
-            <div className="buttonTable">
+            {/* <div className="buttonTable"> */}
                 {/* <Button className="btn-vine btn-brand btn-sm" onClick={ e => handleClick(e, 'download', '') }>
                     <i className="icon-file-excel"></i>
                     <span>Download</span>
@@ -56,11 +55,12 @@ const CommonTable = (props) => {
                     <i className="icon-plus-circle2"></i>
                     <span>Add Data</span>
                 </Button> */}
-            </div>
+            {/* </div> */}
+            {/* <span style={{float: 'right', cursor: 'pointer'}} onClick={this.handlerClickCleanFiltered.bind(this)}><i className="icon-reset"></i></span> */}
             <BootstrapTable data={ props.datas } striped hover version='4' 
                 search={ false }
-                height={360}
-                options={ tableOptions }
+                height={242}
+                options={ options }
                 >
                     {/* {
                         props.tableHead.map((column, index) => {
@@ -78,9 +78,11 @@ const CommonTable = (props) => {
                                     </TableHeaderColumn>
                         })
                     } */}
-                    <TableHeaderColumn dataField='address' filter={ { type: 'TextFilter', delay: 1000 } } headerAlign='center' width='' dataAlign='center' dataFormat={icon} isKey>Address</TableHeaderColumn>
-                    <TableHeaderColumn dataField='status_unit' filter={ { type: 'TextFilter', delay: 1000 } }  headerAlign='center' width='80' dataAlign='center' dataFormat={ status }>Status</TableHeaderColumn>
-                    <TableHeaderColumn dataField='action'  headerAlign='center' width='60' dataAlign='center' dataFormat={actionTable}>Action</TableHeaderColumn>
+                    <TableHeaderColumn dataField='address' filter={ { type: 'TextFilter', defaultValue: props.unit, delay: 1000 } } headerAlign='center' width='120' dataAlign='center' dataFormat={icon} isKey>Unit</TableHeaderColumn>
+                    <TableHeaderColumn dataField='size' filter={ { type: 'TextFilter', delay: 1000 } } headerAlign='center' width='120' dataAlign='center'>Size</TableHeaderColumn>
+                    <TableHeaderColumn dataField='price' filter={ { type: 'TextFilter', delay: 1000 } } headerAlign='center' width='' dataAlign='center'>Price</TableHeaderColumn>
+                    <TableHeaderColumn dataField='status_unit' filter={ { type: 'TextFilter', delay: 1000 } }  headerAlign='center' width='100' dataAlign='center' dataFormat={ status }>Status</TableHeaderColumn>
+                    {/* <TableHeaderColumn dataField='action'  headerAlign='center' width='60' dataAlign='center' dataFormat={actionTable}>Action</TableHeaderColumn> */}
             </BootstrapTable>
         </div>
     )
