@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Table, Card, Form, FormGroup, Label, Input, Button, CardBody, CardHeader, Col, Row, Modal, ModalHeader, ModalBody, Collapse } from 'reactstrap';
+import { Table, Card, Form, FormGroup, Label, Input, Button, CardBody, CardHeader, Col, Row, Popover, PopoverBody } from 'reactstrap';
 import {INITIAL_VALUE, ReactSVGPanZoom, TOOL_NONE} from 'react-svg-pan-zoom';
 import {ReactSvgPanZoomLoader, SvgLoaderSelectElement} from 'react-svg-pan-zoom-loader'
 import 'react-dropdown/style.css'
@@ -24,6 +24,8 @@ class Po extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      povid: 'img-plan',
+      popoverOpen: false,
       lat: -6.2704673,
       lng: 106.6257405,
       zoom: 12,
@@ -65,6 +67,7 @@ class Po extends Component {
         nilai_ipl: "-",
         top: "-",
         tod: "-",
+        size: "-",
         sales_price: "-"
       },
       marker: [
@@ -92,6 +95,7 @@ class Po extends Component {
     }
     this.handleClickArea = this.handleClickArea.bind(this)
     this.clickMarker = this.clickMarker.bind(this)
+    this.popoverToggle = this.popoverToggle.bind(this)
     this._onSelect = this._onSelect.bind(this)
   }
 
@@ -123,6 +127,7 @@ class Po extends Component {
   }
 
   changeTool(nextTool) {
+    this.setState({popoverOpen: false})
     this.setState({tool: nextTool})
   }
 
@@ -131,14 +136,17 @@ class Po extends Component {
   }
 
   fitToViewer() {
+    this.setState({popoverOpen: false})
     this.Viewer.fitToViewer()
   }
 
   fitSelection() {
+    this.setState({popoverOpen: false})
     this.Viewer.fitSelection(40, 40, 200, 200)
   }
 
   zoomOnViewerCenter() {
+    this.setState({popoverOpen: false})
     this.Viewer.zoomOnViewerCenter(1.1)
   }
 
@@ -146,9 +154,18 @@ class Po extends Component {
     this.setState({defaultOption: e});
   }
 
+  popoverToggle = (e) => {
+    e.preventDefault();
+    this.setState({popoverOpen: false})
+  }
+
   handleClickArea = (area) => {
     this.state.customers.map((column, index) => {
       if(column.id === area){
+        this.setState({
+          povid: area, 
+          popoverOpen: true
+        })
         $(area).css({ fill: "rgba(74,173,255,1)" });
         this.setState({unit: column.address});
         this.updateCustomer('name', column.name);
@@ -172,7 +189,8 @@ class Po extends Component {
         this.updateCustomer('nilai_ipl', column.nilai_ipl);
         this.updateCustomer('top', column.top);
         this.updateCustomer('tod', column.tod);
-        this.updateCustomer('sales_price', column.sales_price);
+        this.updateCustomer('size', column.size);
+        this.updateCustomer('sales_price', column.price);
       }else{
         $(area).css({ fill: "rgba(74,173,255,1)" });
       }
@@ -186,8 +204,8 @@ class Po extends Component {
   }
 
   _onSelect (option) {
-    console.log('You selected ', option)
-    this.setState({selected: option, cluster: option.label})
+    // console.log('You selected ', option)
+    this.setState({selected: option, cluster: option.label, popoverOpen: false, povid: 'img-plan'})
     if(option.label === 'Tabebuya'){
       this.setState({lat: -6.2764673, lng: 106.6257405, imgsvg: 'sample.svg', datas: CustomerDb, customers: Customer})
     }else{
@@ -212,11 +230,11 @@ class Po extends Component {
     const position = [this.state.lat, this.state.lng];
     if(this.state.cluster === 'Tabebuya') {
       $('#svg_4, #svg_5, #svg_7, #svg_15, #svg_14, #svg_18, #svg_19, #svg_22, #svg_25').css({ fill: "rgba(74,255,160,.5)" });
-      $('#svg_10, #svg_13').css({ fill: "rgb(255,72,72,.5)" });
+      $('#svg_10, #svg_13').css({ fill: "rgba(255,72,72,.5)" });
       $('#svg_9, #svg_16, #svg_21').css({ fill: "rgba(255,250,72,.5)" });
     }else {
       $('#svg_7, #svg_5, #svg_2, #svg_29, #svg_31, #svg_33, #svg_35, #svg_19, #svg_17, #svg_15, #svg_13, #svg_11').css({ fill: "rgba(74,255,160,.5)" });
-      $('#svg_27, #svg_25').css({ fill: "rgb(255,72,72,.5)" });
+      $('#svg_27, #svg_25').css({ fill: "rgba(255,72,72,.5)" });
       $('#svg_23, #svg_21, #svg_9').css({ fill: "rgba(255,250,72,.5)" });
     }
     
@@ -413,7 +431,7 @@ class Po extends Component {
               <div className="center-block" >
                 <div className="titleAnn" style={{width: '354px'}}>
                   <i className="icon-city"></i> {this.state.cluster}</div>
-                <div className="img-plan">
+                <div className="img-plan" id="img-plan">
                   <ReactSvgPanZoomLoader src={"/assets/img/"+this.state.imgsvg} 
                     proxy={
                       <>
@@ -448,7 +466,7 @@ class Po extends Component {
                       ref={Viewer => this.Viewer = Viewer}
                       tool={this.state.tool} onChangeTool={tool => this.changeTool(tool)}
                       value={this.state.value} onChangeValue={value => this.changeValue(value)}
-                      detectAutoPan={false}
+                      detectAutoPan={false} detectWheel={false}
                       // onZoom={e => console.log('zoom')}
                       // onPan={e => console.log('pan')}
                       // onClick={
@@ -464,6 +482,37 @@ class Po extends Component {
                     </ReactSVGPanZoom>
                   )}/>
                 </div>
+                <Popover style={{minWidth: '140px'}} placement="top" isOpen={this.state.popoverOpen} target={this.state.povid}>
+                  <PopoverBody style={{padding: '0.5rem'}}>
+                    <div style={{width: '100%'}}>
+                      <button style={{float: 'right', border: 'none', backgroundColor: 'transparent', padding: '0', marginRight: '-5px', marginTop: '-4px'}} onClick={(e) => this.popoverToggle(e)}><i className="icon-cross3" style={{float: "right"}}></i></button>
+                    </div>
+                    <div style={{width: '50px', float: 'left'}}>Unit</div>: <b>{this.state.customer.address}</b><br/>
+                    <div style={{width: '50px', float: 'left'}}>Size</div>: <b>{this.state.customer.size}</b><br/>
+                    <div style={{width: '50px', float: 'left'}}>Price</div>: <b>{this.state.customer.sales_price}</b><br/>
+                    <div style={{width: '50px', float: 'left'}}>Status</div>: <b>
+                      {(() => {
+                        if (this.state.customer.status_unit === 'Sold') {
+                          return (
+                            <label style={{backgroundColor: 'rgba(255,72,72,.5)', padding: '0px 6px', marginBottom: '0'}}>{this.state.customer.status_unit}</label>
+                          )
+                        } else if (this.state.customer.status_unit === 'Booked') {
+                          return (
+                            <label style={{backgroundColor: 'rgba(255,250,72,.5)', padding: '0px 6px', marginBottom: '0'}}>{this.state.customer.status_unit}</label>
+                          )
+                        } else if (this.state.customer.status_unit === 'Available') {
+                          return (
+                            <label style={{backgroundColor: 'rgba(74,255,160,.5)', padding: '0px 6px', marginBottom: '0'}}>{this.state.customer.status_unit}</label>
+                          )
+                        } else {
+                          return (
+                            <label style={{backgroundColor: 'white', marginBottom: '0'}}>{this.state.customer.status_unit}</label>
+                          )
+                        }
+                      })()}
+                    </b><br/>
+                  </PopoverBody>
+                </Popover>
               </div>
             </div>
             <div className="contentRight">

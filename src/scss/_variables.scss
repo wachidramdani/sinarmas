@@ -172,6 +172,10 @@ legend {
     border-radius: 2 !important;
 }
 
+.popover { 
+    z-index: 99 !important;
+} 
+
 .titleText {
     float: left;
     width: 100%;

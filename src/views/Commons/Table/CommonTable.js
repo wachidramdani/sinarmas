@@ -5,6 +5,7 @@ import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table';
 import 'react-bootstrap-table/dist/react-bootstrap-table-all.min.css';
 import { tableOptions } from './TableOptions';
 
+
 const CommonTable = (props) => {
 
     const handleClick = (e, tipe, val) => {
@@ -43,7 +44,6 @@ const CommonTable = (props) => {
         }
     };
 
-
     return(
         <div>
             {/* <div className="buttonTable"> */}
@@ -78,6 +78,10 @@ const CommonTable = (props) => {
                                     </TableHeaderColumn>
                         })
                     } */}
+                    {/* <TableHeaderColumn>
+                        Product ID
+                        <br/><a onClick={handlerClickCleanFiltered} style={ { cursor: 'pointer' } }>clear filters</a>
+                    </TableHeaderColumn> */}
                     <TableHeaderColumn dataField='address' filter={ { type: 'TextFilter', defaultValue: props.unit, delay: 1000 } } headerAlign='center' width='120' dataAlign='center' dataFormat={icon} isKey>Unit</TableHeaderColumn>
                     <TableHeaderColumn dataField='size' filter={ { type: 'TextFilter', delay: 1000 } } headerAlign='center' width='120' dataAlign='center'>Size</TableHeaderColumn>
                     <TableHeaderColumn dataField='price' filter={ { type: 'TextFilter', delay: 1000 } } headerAlign='center' width='' dataAlign='center'>Price</TableHeaderColumn>
