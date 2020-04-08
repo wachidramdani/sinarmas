@@ -26,6 +26,7 @@ class Po extends Component {
     this.state = {
       povid: 'img-plan',
       popoverOpen: false,
+      onofcolor: 'on',
       lat: -6.2704673,
       lng: 106.6257405,
       zoom: 12,
@@ -94,6 +95,7 @@ class Po extends Component {
       ],
     }
     this.handleClickArea = this.handleClickArea.bind(this)
+    this.handleClear = this.handleClear.bind(this)
     this.clickMarker = this.clickMarker.bind(this)
     this.popoverToggle = this.popoverToggle.bind(this)
     this._onSelect = this._onSelect.bind(this)
@@ -124,6 +126,19 @@ class Po extends Component {
 
   componentDidMount() {
     this.Viewer.fitToViewer();
+  }
+
+  defaultColor() {
+    // console.log(this.state.cluster,'def');
+    if(this.state.cluster === 'Tabebuya') {
+      $('#svg_4, #svg_5, #svg_7, #svg_15, #svg_14, #svg_18, #svg_19, #svg_22, #svg_25').css({ fill: "rgba(74,255,160,.5)" });
+      $('#svg_10, #svg_13').css({ fill: "rgba(255,72,72,.5)" });
+      $('#svg_9, #svg_16, #svg_21').css({ fill: "rgba(255,250,72,.5)" });
+    }else {
+      $('#svg_7, #svg_5, #svg_2, #svg_29, #svg_31, #svg_33, #svg_35, #svg_19, #svg_17, #svg_15, #svg_13, #svg_11').css({ fill: "rgba(74,255,160,.5)" });
+      $('#svg_27, #svg_25').css({ fill: "rgba(255,72,72,.5)" });
+      $('#svg_23, #svg_21, #svg_9').css({ fill: "rgba(255,250,72,.5)" });
+    }
   }
 
   changeTool(nextTool) {
@@ -159,7 +174,14 @@ class Po extends Component {
     this.setState({popoverOpen: false})
   }
 
+  handleClear = () => {
+    this.setState({unit: ''});
+    this.setState({popoverOpen: false, povid: 'img-plan'})
+    this.defaultColor();
+  }
+
   handleClickArea = (area) => {
+    this.defaultColor();
     this.state.customers.map((column, index) => {
       if(column.id === area){
         this.setState({
@@ -211,10 +233,14 @@ class Po extends Component {
     }else{
       this.setState({lat: -6.3244603, lng: 106.6755952, imgsvg: 'sample2.svg', datas: CustomerDb2, customers: Customer2})
     }
+    setTimeout(() => {
+      this.defaultColor();
+    }, 1000);
   }
 
   clickMarker  = (e, val) => {
     e.preventDefault();
+    this.setState({popoverOpen: false, povid: 'img-plan'})
     let x = []
     if(val === 'Tabebuya') {
       x = {value: 'S1', label: 'Tabebuya'}
@@ -224,20 +250,31 @@ class Po extends Component {
       this.setState({imgsvg: 'sample2.svg', datas: CustomerDb2, customers: Customer2})
     }
     this.setState({selected: x, cluster: val})
+    setTimeout(() => {
+      this.defaultColor();
+    }, 1000);
   }
     
   render() {
     const position = [this.state.lat, this.state.lng];
-    if(this.state.cluster === 'Tabebuya') {
-      $('#svg_4, #svg_5, #svg_7, #svg_15, #svg_14, #svg_18, #svg_19, #svg_22, #svg_25').css({ fill: "rgba(74,255,160,.5)" });
-      $('#svg_10, #svg_13').css({ fill: "rgba(255,72,72,.5)" });
-      $('#svg_9, #svg_16, #svg_21').css({ fill: "rgba(255,250,72,.5)" });
-    }else {
-      $('#svg_7, #svg_5, #svg_2, #svg_29, #svg_31, #svg_33, #svg_35, #svg_19, #svg_17, #svg_15, #svg_13, #svg_11').css({ fill: "rgba(74,255,160,.5)" });
-      $('#svg_27, #svg_25').css({ fill: "rgba(255,72,72,.5)" });
-      $('#svg_23, #svg_21, #svg_9').css({ fill: "rgba(255,250,72,.5)" });
+    if(this.state.onofcolor === 'on'){
+      // console.log(this.state.cluster,'test');
+      // if(this.state.cluster === 'Tabebuya') {
+      //   $('#svg_4, #svg_5, #svg_7, #svg_15, #svg_14, #svg_18, #svg_19, #svg_22, #svg_25').css({ fill: "rgba(74,255,160,.5)" });
+      //   $('#svg_10, #svg_13').css({ fill: "rgba(255,72,72,.5)" });
+      //   $('#svg_9, #svg_16, #svg_21').css({ fill: "rgba(255,250,72,.5)" });
+      // }else {
+      //   $('#svg_7, #svg_5, #svg_2, #svg_29, #svg_31, #svg_33, #svg_35, #svg_19, #svg_17, #svg_15, #svg_13, #svg_11').css({ fill: "rgba(74,255,160,.5)" });
+      //   $('#svg_27, #svg_25').css({ fill: "rgba(255,72,72,.5)" });
+      //   $('#svg_23, #svg_21, #svg_9').css({ fill: "rgba(255,250,72,.5)" });
+      // }
+      setTimeout(() => {
+        this.defaultColor();
+        this.setState({onofcolor: 'off'});
+      }, 2000);
+      
     }
-    
+
     const bar = {
       labels: ['48', '49', '50', '51'],
       datasets: [
@@ -460,27 +497,29 @@ class Po extends Component {
                         <SvgLoaderSelectElement selector="#svg_35" onClick={e => this.handleClickArea("#svg_35")} />
                       </>
                     }
-                    render= {(content) => (
-                    <ReactSVGPanZoom
-                      width={350} height={434}
-                      ref={Viewer => this.Viewer = Viewer}
-                      tool={this.state.tool} onChangeTool={tool => this.changeTool(tool)}
-                      value={this.state.value} onChangeValue={value => this.changeValue(value)}
-                      detectAutoPan={false} detectWheel={false}
-                      // onZoom={e => console.log('zoom')}
-                      // onPan={e => console.log('pan')}
-                      // onClick={
-                        // (e) => {
-                        //   if (e.target.id!='') alert(e.target.id)
+                    render = {(content) => (
+                      <ReactSVGPanZoom
+                        width={350} height={434}
+                        ref={Viewer => this.Viewer = Viewer}
+                        tool={this.state.tool} onChangeTool={tool => this.changeTool(tool)}
+                        value={this.state.value} 
+                        onChangeValue={value => this.changeValue(value)}
+                        detectAutoPan={false} detectWheel={false}
+                        // onZoom={e => console.log('zoom')}
+                        // onPan={e => console.log('pan')}
+                        // onClick={
+                          // (e) => {
+                          //   if (e.target.id!='') alert(e.target.id)
+                          // }
+                        //   event => console.log('click', event.target)
                         // }
-                      //   event => console.log('click', event.target)
-                      // }
-                    >
-                        <svg width={350} height={434} >
-                            {content}
-                        </svg>  
-                    </ReactSVGPanZoom>
-                  )}/>
+                      >
+                          <svg width={350} height={434} >
+                              {content}
+                          </svg>  
+                      </ReactSVGPanZoom>
+                    )}
+                  />
                 </div>
                 <Popover style={{minWidth: '140px'}} placement="top" isOpen={this.state.popoverOpen} target={this.state.povid}>
                   <PopoverBody style={{padding: '0.5rem'}}>
@@ -526,6 +565,7 @@ class Po extends Component {
                       datas={ this.state.datas }
                       unit={ this.state.unit }
                       action={ this.handleClickArea }
+                      clearAction={ this.handleClear }
                     />
                   </CardBody>
               </Card>
@@ -570,8 +610,8 @@ class Po extends Component {
                   </CardBody>
               </Card>
             </div>
-            <Row style={{marginLeft: '-5px', marginRight: '-5px'}}>
-              <Col style={{padding: '0 5px 0 10px', marginRight: '-20px'}}>
+            <Row style={{marginLeft: '5px', marginRight: '5px'}}>
+              <Col xs="12" sm="12" md="4">
                 <Card className="card-accent-primary">
                     <CardBody>
                       <div className="separator-card" style={{marginLeft: '0'}}>
@@ -625,7 +665,7 @@ class Po extends Component {
                     </CardBody>
                 </Card>
               </Col>
-              <Col style={{padding: '0 10px 0 5px !important'}}>
+              <Col xs="12" sm="12" md="4">
                 <Card className="card-accent-primary">
                     <CardBody>
                       <div className="left-area" style={{marginLeft: '0'}}>
@@ -646,12 +686,12 @@ class Po extends Component {
                     </CardBody>
                 </Card>
               </Col>
-              <Col xs="12" sm="12" md="12">
+              <Col xs="12" sm="12" md="4">
                 <Card className="card-accent-primary">
                     <CardBody>
                       <div className="titleText"><b>Construction Progress</b></div>
                       <div style={{width: '100%', float: 'left'}}>
-                        <div style={{width: '100%', height: '200px'}}>
+                        <div style={{width: '100%', height: '148px'}}>
                           <Line ref="chart" data={dataLine} options={optionline}/>
                         </div>
                       </div>
